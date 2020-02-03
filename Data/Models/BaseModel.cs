@@ -2,13 +2,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace XmlSigner.Data.Models
 {
     //[Table("Product")]
     public class BaseModel
     {
-        [HiddenInput(DisplayValue = false), Display(Name = "আই. ডি.")]
+        [HiddenInput(DisplayValue = false), Display(Name = "ID")]
         [Key()]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(Order = 1)]
@@ -26,6 +27,7 @@ namespace XmlSigner.Data.Models
         [HiddenInput(DisplayValue = false), Display(Name = "Is Item Deleated"), Column("IsDeleted")]
         public bool IsDeleted { get; set; } = false;
         */
+        [IgnoreDataMember]
         [HiddenInput(DisplayValue = false)]
         public DateTime? DeletionTime { get; set; }     //DeletionTime not null means the item is deleted
 

@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace XmlSigner.Data.Models
 {
     public class XmlFile : BaseModel
     {
+        [IgnoreDataMember]
         [ConcurrencyCheck]  //2 file should not be same
         [Column("FileContent", TypeName = "text"), Required(ErrorMessage = "File Content should be given"), MinLength(5), Display(Name = "File Content", Prompt = "Please Give File Content")]
         public string FileContent { get; set; }
         [Column("FileRealName"), Required(ErrorMessage = "Real Name should be given"), MinLength(5), MaxLength(32767), Display(Name = "File Real Name", Prompt = "Please Give File Real Name")]
         public string FileRealName { get; set; }
+        [IgnoreDataMember]
         [Column("SignerId"), Display(Name = "Signer Id", Prompt = "Please Give Signer Id")]
         public long? SignerId { get; set; }
         [ForeignKey("SignerId"), Display(Name = "Previous Signed/Unsigned File", Prompt = "Please Select Previous File")]
