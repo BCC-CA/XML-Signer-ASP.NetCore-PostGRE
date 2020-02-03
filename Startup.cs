@@ -22,8 +22,20 @@ namespace XmlSigner
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("DevelopConnection")));
+                    options.UseNpgsql(
+                        Configuration.GetConnectionString("DevelopConnection")));
+            /*if (env.IsDevelopment())
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseNpgsql(
+                        Configuration.GetConnectionString("DevelopConnection")));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseNpgsql(
+                        Configuration.GetConnectionString("DefaultConnection")));
+            }*/
             services.AddDefaultIdentity<IdentityUser<long>>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole<long>>()
                 .AddDefaultTokenProviders()
