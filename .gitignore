@@ -225,3 +225,10 @@ __pycache__/
 
 # Windows thumbnail cache files
 Thumbs.db
+
+
+# exclude everything inside lib folder
+wwwroot/lib/*
+
+# exception to the rule of lib folder
+!wwwroot/lib/.gitkeep
