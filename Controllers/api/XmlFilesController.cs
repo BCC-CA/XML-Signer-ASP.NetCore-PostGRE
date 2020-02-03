@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -55,16 +56,14 @@ namespace XmlSigner.Controllers.api
         [HttpGet("{id}")]
         public async Task<IActionResult> DownloadXmlFile(long id)
         {
-            var xmlFile = await _context.XmlFiles.FindAsync(id);
-
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
             if (xmlFile == null)
             {
-                return NotFound();
+                return NoContent();
             }
-            MemoryStream content = await Adapter.ReadAsMemoryStreamAsync(xmlFile.FileContent);
-            var contentType = "text/xml";
-            var fileName = xmlFile.FileRealName;
-            return File(content, contentType, fileName);
+            byte[] byteArray = Encoding.ASCII.GetBytes(xmlFile.FileContent);
+            MemoryStream fileStream = new MemoryStream(byteArray);
+            return File(fileStream, "application/ocet-stream", xmlFile.FileRealName);
         }
 
         // GET: api/XmlFiles
@@ -80,7 +79,6 @@ namespace XmlSigner.Controllers.api
         public async Task<ActionResult<XmlFile>> GetXmlFile(long id)
         {
             var xmlFile = await _context.XmlFiles.FindAsync(id);
-
             if (xmlFile == null)
             {
                 return NotFound();
