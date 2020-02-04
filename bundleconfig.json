@@ -15,7 +15,10 @@
     ],
     "minify": {
       "enabled": true,
-      "renameLocals": true
+      "renameLocals": true,
+      "keepOneSpaceWhenCollapsing": true,
+      "preserveImportantComments": false,
+      "alwaysEscapeNonAscii": true
     },
     "sourceMap": true
   }
