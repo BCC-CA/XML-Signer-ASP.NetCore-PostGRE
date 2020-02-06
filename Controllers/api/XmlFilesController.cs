@@ -30,7 +30,7 @@ namespace XmlSigner.Controllers.api
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<long>> UploadXmlFile([FromForm]long? previousFileId, [FromForm]IFormFile xmlFile)    //XmlFile xmlFile
+        public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long? previousFileId)    //XmlFile xmlFile
         {
             XmlFile uploadedFile = new XmlFile();
             if (previousFileId != null)
@@ -61,7 +61,7 @@ namespace XmlSigner.Controllers.api
             {
                 return NoContent();
             }
-            byte[] byteArray = Encoding.ASCII.GetBytes(xmlFile.FileContent);
+            byte[] byteArray = Encoding.UTF8.GetBytes(xmlFile.FileContent);
             MemoryStream fileStream = new MemoryStream(byteArray);
             return File(fileStream, "application/ocet-stream", xmlFile.FileRealName);
         }
