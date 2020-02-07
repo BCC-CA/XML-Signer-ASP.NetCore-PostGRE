@@ -1,6 +1,4 @@
-using System;
-
-namespace XmlSigner.Models
+namespace XmlSigner.ViewModels
 {
     public class ErrorViewModel
     {

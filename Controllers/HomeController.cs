@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using XmlSigner.Models;
+using XmlSigner.ViewModels;
 
 namespace XmlSigner.Controllers
 {
