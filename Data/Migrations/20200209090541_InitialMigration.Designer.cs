@@ -10,8 +10,8 @@ using XmlSigner.Data;
 namespace XmlSigner.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200209060649_BaseTableUpdate")]
-    partial class BaseTableUpdate
+    [Migration("20200209090541_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,7 +227,7 @@ namespace XmlSigner.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreateTime")
+                    b.Property<DateTime?>("CreateTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("CreateTime")
                         .HasColumnType("TIMESTAMPTZ");

@@ -50,31 +50,6 @@ namespace XmlSigner.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "XmlFiles",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreateTime = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: true),
-                    LastUpdateTime = table.Column<DateTime>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    FileContent = table.Column<string>(type: "text", nullable: false),
-                    FileRealName = table.Column<string>(maxLength: 32767, nullable: false),
-                    SignerId = table.Column<long>(nullable: true),
-                    PreviousFileId = table.Column<long>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_XmlFiles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_XmlFiles_XmlFiles_PreviousFileId",
-                        column: x => x.PreviousFileId,
-                        principalTable: "XmlFiles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -180,6 +155,37 @@ namespace XmlSigner.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "XmlFiles",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreateTime = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: true),
+                    LastUpdateTime = table.Column<DateTime>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    FileContent = table.Column<string>(type: "text", nullable: false),
+                    FileRealName = table.Column<string>(maxLength: 32767, nullable: false),
+                    SignerId = table.Column<long>(nullable: true),
+                    PreviousFileId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XmlFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_XmlFiles_XmlFiles_PreviousFileId",
+                        column: x => x.PreviousFileId,
+                        principalTable: "XmlFiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_XmlFiles_AspNetUsers_SignerId",
+                        column: x => x.SignerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -221,6 +227,11 @@ namespace XmlSigner.Data.Migrations
                 name: "IX_XmlFiles_PreviousFileId",
                 table: "XmlFiles",
                 column: "PreviousFileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_XmlFiles_SignerId",
+                table: "XmlFiles",
+                column: "SignerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
