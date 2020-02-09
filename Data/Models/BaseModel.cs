@@ -17,7 +17,7 @@ namespace XmlSigner.Data.Models
         [HiddenInput(DisplayValue = false), Display(Name = "First Entry Time")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("CreateTime", TypeName = "TIMESTAMPTZ")]
-        public DateTime CreateTime { get; set; } = DateTime.UtcNow;
+        public DateTime? CreateTime { get; set; } = DateTime.UtcNow;
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [HiddenInput(DisplayValue = false), Display(Name = "Last Update Time"), Column("LastUpdateTime")]
         public DateTime? LastUpdateTime { get; set; } = DateTime.UtcNow;
@@ -30,6 +30,11 @@ namespace XmlSigner.Data.Models
         [IgnoreDataMember]
         [HiddenInput(DisplayValue = false)]
         public DateTime? DeletionTime { get; set; }     //DeletionTime not null means the item is deleted
+
+        /*public BaseModel()
+        {
+            CreateTime = DateTime.UtcNow;
+        }*/
 
         public void SoftDelete()
         {

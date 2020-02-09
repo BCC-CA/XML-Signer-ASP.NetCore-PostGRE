@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XmlSigner.ViewModels;
@@ -19,6 +20,8 @@ namespace XmlSigner.Controllers
             return View();
         }
 
+        //[AllowAnonymous]
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
@@ -27,6 +30,7 @@ namespace XmlSigner.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            _logger.LogError("Error In UI page");
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
