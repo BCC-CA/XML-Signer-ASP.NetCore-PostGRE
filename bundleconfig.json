@@ -13,6 +13,7 @@
       "wwwroot/lib/twitter-bootstrap/js/bootstrap.bundle.js",
       "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
       "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
+      "wwwroot/lib/microsoft-signalr/dist/browser/signalr.js",
       "wwwroot/js/site.js"
     ],
     "minify": {
@@ -20,7 +21,8 @@
       "renameLocals": true,
       "keepOneSpaceWhenCollapsing": true,
       "preserveImportantComments": false,
-      "alwaysEscapeNonAscii": true
+      "alwaysEscapeNonAscii": true,
+      "commentMode": "none"
     },
     "sourceMap": true
   }

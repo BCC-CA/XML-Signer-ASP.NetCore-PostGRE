@@ -50,7 +50,7 @@ namespace XmlSigner.Controllers
         public IActionResult Create()
         {
             ViewData["PreviousFileId"] = new SelectList(_context.XmlFiles, "Id", "FileContent");
-            ViewData["SignerId"] = new SelectList(_context.Users, "Id", "Id");
+            //ViewData["SignerId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
