@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace XmlSigner.ViewModels.Mappers
 {
-    public class XmlFile
+    public class XmlFileMapper
     {
         //Should implement manual mapper
     }

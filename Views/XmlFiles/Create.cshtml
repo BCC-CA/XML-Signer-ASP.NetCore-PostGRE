@@ -1,0 +1,38 @@
+﻿@model XmlSigner.Data.Models.XmlFile
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Add an XML File</h1>
+
+<h4>Xml File</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FileContent" class="control-label"></label>
+                <input class="form-control" type="file" asp-for="FileContent">
+                <span asp-validation-for="FileContent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PreviousFileId" class="control-label"></label>
+                <select asp-for="PreviousFileId" class ="form-control" asp-items="ViewBag.PreviousFileId"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

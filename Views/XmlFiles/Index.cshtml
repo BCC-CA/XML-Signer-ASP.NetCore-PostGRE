@@ -1,0 +1,71 @@
+﻿@model IEnumerable<XmlSigner.Data.Models.XmlFile>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FileContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FileRealName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Signer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousSignedFile)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastUpdateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeletionTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FileContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FileRealName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Signer.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreviousSignedFile.FileContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastUpdateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeletionTime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
