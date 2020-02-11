@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FileContent" class="control-label"></label>
-                <input asp-for="FileContent" class="form-control" />
+                <textarea asp-for="FileContent" class="form-control" rows="12" cols="50" readonly disabled></textarea>
                 <span asp-validation-for="FileContent" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,12 +24,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="SignerId" class="control-label"></label>
-                <select asp-for="SignerId" class="form-control" asp-items="ViewBag.SignerId"></select>
+                <select asp-for="SignerId" class="form-control" asp-items="ViewBag.SignerId">
+                    <option disabled selected>--- SELECT ---</option>
+                </select>
                 <span asp-validation-for="SignerId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PreviousFileId" class="control-label"></label>
-                <select asp-for="PreviousFileId" class="form-control" asp-items="ViewBag.PreviousFileId"></select>
+                <select asp-for="PreviousFileId" class="form-control" asp-items="ViewBag.PreviousFileId">
+                    <option disabled selected>--- SELECT ---</option>
+                </select>
                 <span asp-validation-for="PreviousFileId" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />

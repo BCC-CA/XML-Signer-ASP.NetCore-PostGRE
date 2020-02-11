@@ -7,49 +7,52 @@
 <h1>Details</h1>
 
 <div>
-    <h4>XmlFile</h4>
+    <h4>Xml File</h4>
     <hr />
+    <h4>
+        <a href="xml_signer:\\@Context.Request.Host@Context.Request.Path" class="btn btn-outline-danger" role="button">Sign File</a>
+    </h4>
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FileContent)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FileContent)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FileRealName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FileRealName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Signer)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Signer.Id)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.PreviousSignedFile)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PreviousSignedFile.FileContent)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreateTime)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreateTime)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LastUpdateTime)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastUpdateTime)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DeletionTime)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DeletionTime)
         </dd>
     </dl>

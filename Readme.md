@@ -8,7 +8,8 @@ This app will also be used as user verification service.
 
 	- Add-Migration InitialMigration -OutputDir "Data/Migrations"
 	- Remove-Migration
-	- Remove-Migration -Force
+	- Remove-Migration -Force	(Remove last migration forcefully)
+	- Update-Database 0			(Remove all migration)
 	- Update-database
 	- Script-migration
 
