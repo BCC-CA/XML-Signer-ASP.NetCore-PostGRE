@@ -2,6 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace XmlSigner.Library
 {
@@ -16,6 +19,18 @@ namespace XmlSigner.Library
                     result.AppendLine(await reader.ReadLineAsync());
             }
             return result.ToString().Trim();
+        }
+
+        internal static XmlDocument SerializeToXml<T>(T source)
+        {
+            XmlDocument document = new XmlDocument();
+            XPathNavigator navigator = document.CreateNavigator();
+            using (var writer = navigator.AppendChild())
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                serializer.Serialize(writer, source);
+            }
+            return document;
         }
     }
 }

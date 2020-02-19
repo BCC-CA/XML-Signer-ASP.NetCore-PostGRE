@@ -2,9 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using XmlSigner.Data;
 
 namespace XmlSigner.Data.Migrations
 {
@@ -274,6 +272,12 @@ namespace XmlSigner.Data.Migrations
                         .HasColumnType("TIMESTAMPTZ");
 
                     b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("DownloadToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DownloadTokenExpirityTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FileContent")

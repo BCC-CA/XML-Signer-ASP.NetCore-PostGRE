@@ -14,7 +14,6 @@ This app will also be used as user verification service.
 	- Script-migration
 
 	- Update-Database –TargetMigration: <name of last good migration>
-	- Get-Migrations
 
 
 ## Initial Project Builder-

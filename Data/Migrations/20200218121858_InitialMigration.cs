@@ -50,6 +50,27 @@ namespace XmlSigner.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DemoData",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreateTime = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: true),
+                    LastUpdateTime = table.Column<DateTime>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Organization = table.Column<string>(nullable: true),
+                    Department = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    Phone = table.Column<string>(nullable: true),
+                    NID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DemoData", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -166,6 +187,8 @@ namespace XmlSigner.Data.Migrations
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     FileContent = table.Column<string>(type: "text", nullable: false),
                     FileRealName = table.Column<string>(maxLength: 32767, nullable: false),
+                    DownloadToken = table.Column<string>(nullable: true),
+                    DownloadTokenExpirityTime = table.Column<DateTime>(nullable: true),
                     SignerId = table.Column<long>(nullable: true),
                     PreviousFileId = table.Column<long>(nullable: true)
                 },
@@ -250,6 +273,9 @@ namespace XmlSigner.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "DemoData");
 
             migrationBuilder.DropTable(
                 name: "XmlFiles");

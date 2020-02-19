@@ -10,7 +10,12 @@
     <h4>Xml File</h4>
     <hr />
     <h4>
-        <a href="xml_signer:\\@Context.Request.Host@Context.Request.Path" class="btn btn-outline-danger" role="button">Sign File</a>
+        <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
+           class="btn btn-outline-danger sign_file"
+           file_id="@Model.Id"
+           role="button">
+            Sign File
+        </a>
     </h4>
     <dl class="row">
         <dt class="col-sm-2">

@@ -3,15 +3,13 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using XmlSigner.Data;
 
 namespace XmlSigner.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200211085411_DemoData")]
-    partial class DemoData
+    [Migration("20200218121858_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -276,6 +274,12 @@ namespace XmlSigner.Data.Migrations
                         .HasColumnType("TIMESTAMPTZ");
 
                     b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("DownloadToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DownloadTokenExpirityTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FileContent")

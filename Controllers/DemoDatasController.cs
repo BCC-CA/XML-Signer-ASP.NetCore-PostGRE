@@ -1,22 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
+using XmlSigner.Library;
 
 namespace XmlSigner.Controllers
 {
     public class DemoDatasController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<IdentityUser<long>> _userManager;
 
-        public DemoDatasController(ApplicationDbContext context)
+        public DemoDatasController(ApplicationDbContext context, UserManager<IdentityUser<long>> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: DemoDatas
@@ -60,6 +62,14 @@ namespace XmlSigner.Controllers
             {
                 _context.Add(demoData);
                 await _context.SaveChangesAsync();
+                //Save the XML
+                XmlFile convertedXmlFile = new XmlFile();
+                convertedXmlFile.FileContent = Adapter.SerializeToXml(demoData).OuterXml;
+                convertedXmlFile.FileRealName = Guid.NewGuid() + ".xml";
+                convertedXmlFile.Signer = await _userManager.GetUserAsync(User);
+                _context.XmlFiles.Add(convertedXmlFile);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(demoData);

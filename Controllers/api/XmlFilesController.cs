@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +32,27 @@ namespace XmlSigner.Controllers.api
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long? previousFileId)    //XmlFile xmlFile
+        public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long? previousFileId, [FromForm]string token)    //XmlFile xmlFile
         {
             XmlFile uploadedFile = new XmlFile();
-            if (previousFileId != null)
+            if (previousFileId == null)
             {
-                uploadedFile.PreviousSignedFile = await _context.XmlFiles.FindAsync(previousFileId);
+                return BadRequest("Previous File ID not Given");
             }
+            else
+            {
+                uploadedFile.PreviousSignedFile = await _context.XmlFiles
+                                                    .Where(xml => xml.Id == previousFileId)
+                                                    .Where(xml => xml.DownloadToken == token)
+                                                    .Where(xml => xml.DownloadTokenExpirityTime >= DateTime.UtcNow)
+                                                    .FirstOrDefaultAsync();
+                if(uploadedFile.PreviousSignedFile == null)
+                {
+                    return BadRequest("Valid Token and previous file ID don't match");
+                }
+                uploadedFile.PreviousSignedFile.DownloadTokenExpirityTime = DateTime.UtcNow;    //Update Time for marking as used
+            }
+
             if (xmlFile.Length > 0)
             {
                 uploadedFile.FileContent = await Adapter.ReadAsStringAsync(xmlFile);
@@ -52,11 +68,35 @@ namespace XmlSigner.Controllers.api
             return uploadedFile.Id;
         }
 
-        // GET: api/XmlFiles/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> DownloadXmlFile(long id)
+        // GET: api/XmlFiles/token/9
+        [Authorize]
+        [HttpGet("token/{id}")]
+        public async Task<string> GetXmlFileDownloadToken(long id)
         {
+            //Should add token verification
             XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
+            if (xmlFile == null)
+            {
+                return "";
+            }
+            xmlFile.DownloadToken = Guid.NewGuid().ToString();
+            xmlFile.DownloadTokenExpirityTime = DateTime.UtcNow.AddMinutes(5);
+
+            _context.XmlFiles.Update(xmlFile);
+            await _context.SaveChangesAsync();
+
+            return xmlFile.DownloadToken;
+        }
+
+        // GET: api/XmlFiles/asdasd234/9
+        [HttpGet("{token}/{id}")]
+        public async Task<IActionResult> DownloadXmlFile(long id, string token)
+        {
+            XmlFile xmlFile = await _context.XmlFiles
+                                .Where(xml => xml.Id == id)
+                                .Where(xml => xml.DownloadToken == token)
+                                .Where(xml => xml.DownloadTokenExpirityTime >= DateTime.UtcNow)
+                                .FirstOrDefaultAsync();
             if (xmlFile == null)
             {
                 return NoContent();
