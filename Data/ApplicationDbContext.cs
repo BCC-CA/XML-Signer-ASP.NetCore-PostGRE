@@ -22,8 +22,10 @@ namespace XmlSigner.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            //This foreign key convertions should be transferred in DB model and should not stay in here////
             modelBuilder.Entity<User>(user =>
             {
+                user.ToTable("Users");
                 user.HasKey(x => x.Id);
 
                 // Each User can have many UserClaims
@@ -53,6 +55,8 @@ namespace XmlSigner.Data
 
             modelBuilder.Entity<Role>(role =>
             {
+                role.ToTable("Roles");
+                role.HasKey(x => x.Id);
                 // Each Role can have many entries in the UserRole join table
                 role.HasMany(e => e.UserRoles)
                     .WithOne(e => e.Role)
@@ -65,6 +69,62 @@ namespace XmlSigner.Data
                     .HasForeignKey(rc => rc.RoleId)
                     .IsRequired();
             });
+
+            //Many to many
+            modelBuilder.Entity<UserRole>(userRole =>
+            {
+                userRole.ToTable("UserRoles");
+                userRole.HasKey(x => new { x.UserId, x.RoleId });
+                userRole
+                    .HasOne(ur => ur.Role)
+                    .WithMany(ur => ur.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+                userRole
+                    .HasOne(ur => ur.User)
+                    .WithMany(ur => ur.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<UserClaim>(userClaim =>
+            {
+                userClaim.ToTable("UserClaims");
+                userClaim.HasKey(x => x.Id);
+                // Each Role can have many entries in the UserRole join table
+                userClaim.HasOne(uc => uc.User)
+                    .WithMany(uc => uc.Claims)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<UserLogin>(userLogin =>
+            {
+                userLogin.ToTable("UserLogins");
+                //userLogin.HasKey(x => new { x.UserId, x.ProviderKey });
+                // Each Role can have many entries in the UserRole join table
+                /*userLogin.HasOne(uc => uc.User)
+                        .WithMany(uc => uc.)*/
+            });
+
+            modelBuilder.Entity<RoleClaim>(roleClaim =>
+            {
+                roleClaim.ToTable("RoleClaims");
+                //roleClaim.HasKey(x => new { x.UserId, x.ProviderKey });
+                // Each Role can have many entries in the UserRole join table
+                /*userLogin.HasOne(uc => uc.User)
+                        .WithMany(uc => uc.)*/
+            });
+
+            modelBuilder.Entity<UserToken>(userToken =>
+            {
+                userToken.ToTable("UserTokens");
+                //userToken.HasKey(x => new { x.UserId, x.ProviderKey });
+                // Each Role can have many entries in the UserRole join table
+                /*userLogin.HasOne(uc => uc.User)
+                        .WithMany(uc => uc.)*/
+            });
+            ////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
         /*
