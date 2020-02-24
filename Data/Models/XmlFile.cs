@@ -14,8 +14,6 @@ namespace XmlSigner.Data.Models
         public string FileContent { get; set; }
         [Column("FileRealName"), Required(ErrorMessage = "Real Name should be given"), MinLength(5), MaxLength(32767), Display(Name = "File Real Name", Prompt = "Please Give File Real Name")]
         public string FileRealName { get; set; }
-        public string DownloadToken { get; set; }       //Download Token should be stored in different table for ensuring multiple file download, now it is stored for testing
-        public DateTime? DownloadTokenExpirityTime { get; set; }
 
         [IgnoreDataMember]
         [Column("SignerId"), Display(Name = "Signer Id", Prompt = "Please Give Signer Id")]

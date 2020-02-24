@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Xml.XPath;
 
 namespace XmlSigner.Library
 {
@@ -21,7 +20,8 @@ namespace XmlSigner.Library
             return result.ToString().Trim();
         }
 
-        internal static XmlDocument SerializeToXml<T>(T source)
+        /*
+        internal static XmlDocument SerializeToXmlOld<T>(T source)
         {
             XmlDocument document = new XmlDocument();
             XPathNavigator navigator = document.CreateNavigator();
@@ -31,6 +31,25 @@ namespace XmlSigner.Library
                 serializer.Serialize(writer, source);
             }
             return document;
+        }
+        */
+
+        // https://stackoverflow.com/questions/2347642/deserialize-from-string-instead-textreader
+        // Calling -> _ = Adapter.SerializeToXml(demoData).OuterXml;
+        internal static XmlDocument SerializeToXml<T>(T objectEntry)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            new XmlSerializer(typeof(T)).Serialize(new StreamWriter(memoryStream, Encoding.UTF8), objectEntry);
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(Encoding.UTF8.GetString(memoryStream.ToArray()));
+            return document;
+        }
+
+        // Calling -> Adapter.DeSerializeFromXml<DemoData>(xmlDocument);
+        internal static T DeSerializeFromXml<T>(XmlDocument xmlDocument)
+        {
+            return (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(xmlDocument.OuterXml));
         }
     }
 }

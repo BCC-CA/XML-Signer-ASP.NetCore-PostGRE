@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -28,29 +30,67 @@ namespace XmlSigner.Controllers.api
             _userManager = userManager;
         }
 
+        // POST: api/XmlFiles/verify
+        [HttpPost("verify")]
+        public async Task<ActionResult<List<X509Certificate2>>> VerifyXmlFile([FromForm]IFormFile xmlFile)    //XmlFile xmlFile
+        {
+            List<X509Certificate2> signerCertificateList = new List<X509Certificate2>();
+
+            if (xmlFile.Length > 0)
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                try {
+                    xmlDocument.LoadXml(await Adapter.ReadAsStringAsync(xmlFile));
+                    if (XmlSign.CheckIfDocumentPreviouslySigned(xmlDocument))
+                    {
+                        return XmlSign.VerifyAllSign(xmlDocument);
+                    }
+                    else
+                    {
+                        return BadRequest("Uploaded file has no sign");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    return BadRequest("The file is compromised");
+                }
+            }
+            else
+            {
+                return BadRequest("A file Should be Uploaded");
+            }
+        }
+
         // POST: api/XmlFiles
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long? previousFileId, [FromForm]string token)    //XmlFile xmlFile
+        public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long previousFileId, [FromForm]string token)    //XmlFile xmlFile
         {
             XmlFile uploadedFile = new XmlFile();
-            if (previousFileId == null)
+            if (previousFileId == 0)
             {
                 return BadRequest("Previous File ID not Given");
             }
             else
             {
-                uploadedFile.PreviousSignedFile = await _context.XmlFiles
-                                                    .Where(xml => xml.Id == previousFileId)
-                                                    .Where(xml => xml.DownloadToken == token)
-                                                    .Where(xml => xml.DownloadTokenExpirityTime >= DateTime.UtcNow)
+                DownloadUploadToken downloadUploadToken = await _context.DownloadUploadTokens
+                                                    .Where(dut => dut.IsUsed == false)
+                                                    .Where(xml => xml.Token == token)
+                                                    .Where(xml => xml.ExpirityTime >= DateTime.UtcNow)
+                                                    .Where(xml => xml.TableName >= TableName.XmlFile)
                                                     .FirstOrDefaultAsync();
+                if (downloadUploadToken == null)
+                {
+                    return BadRequest("Token Invalid");
+                }
+                uploadedFile.PreviousSignedFile = await _context.XmlFiles.FindAsync(downloadUploadToken.DbEntryId);
                 if(uploadedFile.PreviousSignedFile == null)
                 {
-                    return BadRequest("Valid Token and previous file ID don't match");
+                    return BadRequest("File Not Exists!!");
                 }
-                uploadedFile.PreviousSignedFile.DownloadTokenExpirityTime = DateTime.UtcNow;    //Update Time for marking as used
+                downloadUploadToken.MarkAsUsed();
+                _context.DownloadUploadTokens.Update(downloadUploadToken);
             }
 
             if (xmlFile.Length > 0)
@@ -70,33 +110,39 @@ namespace XmlSigner.Controllers.api
 
         // GET: api/XmlFiles/token/9
         [Authorize]
-        [HttpGet("token/{id}")]
-        public async Task<string> GetXmlFileDownloadToken(long id)
+        [HttpPost("token")]
+        public async Task<ActionResult<string>> GetXmlFileDownloadToken(string signReason, long verificationStep, long id)
         {
             //Should add token verification
             XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
             if (xmlFile == null)
             {
-                return "";
+                return BadRequest("File Not Exists");
             }
-            xmlFile.DownloadToken = Guid.NewGuid().ToString();
-            xmlFile.DownloadTokenExpirityTime = DateTime.UtcNow.AddMinutes(5);
+            DownloadUploadToken downloadUploadToken = new DownloadUploadToken(signReason, verificationStep, TableName.XmlFile, id);
 
-            _context.XmlFiles.Update(xmlFile);
+            _context.DownloadUploadTokens.Add(downloadUploadToken);
             await _context.SaveChangesAsync();
 
-            return xmlFile.DownloadToken;
+            return downloadUploadToken.Token;
         }
 
         // GET: api/XmlFiles/asdasd234/9
         [HttpGet("{token}/{id}")]
         public async Task<IActionResult> DownloadXmlFile(long id, string token)
         {
-            XmlFile xmlFile = await _context.XmlFiles
-                                .Where(xml => xml.Id == id)
-                                .Where(xml => xml.DownloadToken == token)
-                                .Where(xml => xml.DownloadTokenExpirityTime >= DateTime.UtcNow)
-                                .FirstOrDefaultAsync();
+            DownloadUploadToken downloadUploadToken = await _context.DownloadUploadTokens
+                                                    .Where(dut => dut.IsUsed == false)
+                                                    .Where(xml => xml.Token == token)
+                                                    .Where(xml => xml.ExpirityTime >= DateTime.UtcNow)
+                                                    .Where(xml => xml.TableName >= TableName.XmlFile)
+                                                    .Where(dut => dut.DbEntryId == id)
+                                                    .FirstOrDefaultAsync();
+            if (downloadUploadToken == null)
+            {
+                return BadRequest("Token Invalid");
+            }
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(downloadUploadToken.DbEntryId);
             if (xmlFile == null)
             {
                 return NoContent();

@@ -27,7 +27,9 @@ $(document).ready(function () {
                 id: id,
                 token: token,
                 downloadUrl: baseUrl + "api/XmlFiles/" + token + "/" + id,
-                uploadUrl: baseUrl + "api/XmlFiles"
+                uploadUrl: baseUrl + "api/XmlFiles",
+                reason: "Anything",
+                procedureSerial: 1
             },
             success: function (data) {
                 alert(data);
