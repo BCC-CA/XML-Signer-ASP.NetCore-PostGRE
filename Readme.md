@@ -6,14 +6,14 @@ This app will also be used as user verification service.
 
 ## Migration Commands-
 
-	- Add-Migration InitialMigration -OutputDir "Data/Migrations"
-	- Remove-Migration
+	- Add-Migration InitialMigration -OutputDir "Data/Migrations"	(Add migration to a specific folder)
+	- Add-Migration <MigrationName>	(Add a new migration in normal time)
+	- Remove-Migration			(Remove last migration)
 	- Remove-Migration -Force	(Remove last migration forcefully)
-	- Update-Database 0			(Remove all migration)
-	- Update-database
+	- Update-Database 0			(Remove all table)
+	- Update-Database			(Create all table)
 	- Script-migration
-
-	- Update-Database –TargetMigration: <name of last good migration>
+	- Update-Database –TargetMigration: <name of last good migration>	(Restore from a good migration)
 
 
 ## Initial Project Builder-
