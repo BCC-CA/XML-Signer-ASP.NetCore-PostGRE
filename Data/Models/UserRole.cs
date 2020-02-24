@@ -2,8 +2,11 @@
 
 namespace XmlSigner.Data.Models
 {
-    public class UserRole : IdentityRole<long>
+    public class UserRole : IdentityUserRole<long>
     {
-        //Not configured yet
+        //Basic Tables - Start
+        public virtual User User { get; set; }
+        public virtual Role Role { get; set; }
+        //Basic Tables - End
     }
 }

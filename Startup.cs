@@ -6,6 +6,7 @@ using XmlSigner.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using XmlSigner.Data.Models;
 
 namespace XmlSigner
 {
@@ -36,10 +37,15 @@ namespace XmlSigner
                     options.UseNpgsql(
                         Configuration.GetConnectionString("DefaultConnection")));
             }*/
-            services.AddDefaultIdentity<IdentityUser<long>>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole<long>>()
+            services
+                .AddDefaultIdentity<User>(options => {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.Password.RequireDigit = false;
+                })
+                .AddRoles<Role>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
