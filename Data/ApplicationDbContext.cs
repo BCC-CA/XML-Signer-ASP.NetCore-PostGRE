@@ -9,7 +9,7 @@ namespace XmlSigner.Data
     {
         //Table List - Auth tables are added by default
         public DbSet<XmlFile> XmlFiles { get; set; }
-        public DbSet<DemoData> DemoData { get; set; }
+        public DbSet<LeaveApplication> LeaveApplication { get; set; }
         //Table List End
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

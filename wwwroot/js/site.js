@@ -1,19 +1,24 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-
-var temp;
 $(document).ready(function () {
     $.support.cors = true;
 
+    $('.DatePicker').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        //title: "Select BD",
+        todayHighlight: true,
+        //startView: 'decade',
+        weekStart: 6
+    });
+
     $(".sign_file").click(function () {
         var id = $(this).attr('file_id');
-
         var token = $.ajax({
             type: "GET",
             url: "/api/XmlFiles/token/" + id,
             async: false
         }).responseText;
         var baseUrl = window.location.protocol + "//" + window.location.host + "/";
-
         $.ajax({
             type: "POST",
             crossdomain: true,
@@ -27,13 +32,15 @@ $(document).ready(function () {
                 id: id,
                 token: token,
                 downloadUrl: baseUrl + "api/XmlFiles/" + token + "/" + id,
-                uploadUrl: baseUrl + "api/XmlFiles"
+                uploadUrl: baseUrl + "api/XmlFiles",
+                reason: "Anything You Give",
+                procedureSerial: 1
             },
             success: function (data) {
                 alert(data);
                 console.log(data);
             },
-            error: function(xhr, ajaxOptions, thrownError) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr);
                 console.log(ajaxOptions);
                 console.log(thrownError);

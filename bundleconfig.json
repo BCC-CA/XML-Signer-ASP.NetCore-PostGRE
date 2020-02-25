@@ -3,6 +3,8 @@
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
       "wwwroot/lib/twitter-bootstrap/css/bootstrap.css",
+      //"wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker.css",
+      //"wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css",
       "wwwroot/css/site.css"
     ]
   },
@@ -14,6 +16,7 @@
       "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
       "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
       "wwwroot/lib/microsoft-signalr/dist/browser/signalr.js",
+      "wwwroot/lib/bootstrap-datepicker/js/bootstrap-datepicker.js",
       "wwwroot/js/site.js"
     ],
     "minify": {

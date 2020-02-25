@@ -3,7 +3,6 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "provider": "cdnjs",
       "library": "twitter-bootstrap@4.4.1",
       "destination": "wwwroot/lib/twitter-bootstrap/",
       "files": [
@@ -12,7 +11,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "jquery@3.4.1",
       "destination": "wwwroot/lib/jquery/",
       "files": [
@@ -29,7 +27,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "jquery-validation-unobtrusive@3.2.11",
       "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
       "files": [
@@ -42,6 +39,15 @@
       "destination": "wwwroot/lib/microsoft-signalr",
       "files": [
         "dist/browser/signalr.js"
+      ]
+    },
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/",
+      "files": [
+        "css/bootstrap-datepicker.css",
+        "css/bootstrap-datepicker3.css",
+        "js/bootstrap-datepicker.js"
       ]
     }
   ]
