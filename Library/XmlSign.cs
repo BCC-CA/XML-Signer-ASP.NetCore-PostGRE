@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Xml;
+using XmlSigner.Library.Model;
 
 namespace XmlSigner.Library
 {
@@ -50,6 +51,51 @@ namespace XmlSigner.Library
                 xmlDocument = RemoveLastSign(xmlDocument);
             }
             return signerCertificateList;
+        }
+
+        internal static List<Certificate> GetAllSign(XmlDocument xmlDocument)
+        {
+            if (!CheckIfDocumentPreviouslySigned(xmlDocument))
+                return null;
+            List<Certificate> signerCertificateList = new List<Certificate>();
+
+            while (CheckIfDocumentPreviouslySigned(xmlDocument))
+            {
+                if (VerifyLastSign(xmlDocument) == false)
+                {
+                    return null;
+                }
+                else
+                {
+                    signerCertificateList.Add(GetLastSignerCertificateModel(xmlDocument));
+                }
+                //Update xmlDocument by removing last sign tag
+                xmlDocument = RemoveLastSign(xmlDocument);
+            }
+            return signerCertificateList;
+        }
+
+        private static Certificate GetLastSignerCertificateModel(XmlDocument xmlDocument)
+        {
+            if (!CheckIfDocumentPreviouslySigned(xmlDocument))
+            {
+                return null;
+            }
+            XmlDocument document = new XmlDocument();
+
+            // Find the "Signature" node and create a new
+            // XmlNodeList object.
+            XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Signature");
+
+            // Load the signature node.
+
+            document.LoadXml(((XmlElement)nodeList[nodeList.Count - 1]).OuterXml);
+            string certString = document.GetElementsByTagName("X509Data")[0].InnerText;
+            //var timeString = Adapter.Base64DecodTime(document.GetElementsByTagName("Reference")[0].InnerText);
+            string timeString = document.GetElementsByTagName("Reference")[0].Attributes["Id"].Value;
+            /*...Decode text in cert here (may need to use Encoding, Base64, UrlEncode, etc) ending with 'data' being a byte array...*/
+            X509Certificate2 certificate = new X509Certificate2(Encoding.ASCII.GetBytes(certString));
+            return new Certificate(certificate, timeString);
         }
 
         private static XmlDocument RemoveLastSign(XmlDocument xmlDocument)

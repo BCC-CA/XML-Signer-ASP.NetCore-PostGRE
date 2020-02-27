@@ -65,14 +65,40 @@
         </div>
     </div>
 
-    <h4>
-        <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
-           class="btn btn-outline-danger sign_file"
-           file_id="@Model.XmlFile.Id"
-           role="button">
-            Sign Application
-        </a>
-    </h4>
+    @if (Model.CertificateList?.Any() != true)
+    {
+        <h4>
+            <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
+               class="btn btn-outline-danger sign_file"
+               file_id="@Model.XmlFile.Id"
+               role="button">
+                Sign Application
+            </a>
+        </h4>
+    }
+    else
+    {
+        <div class="container">
+            @foreach (var item in Model.CertificateList)
+            {
+                <hr />
+                <div class="row bg-info">
+                    <div class="col-md-4">
+                        <label class="control-label">Issuer</label>
+                        <p>@item.Issuer</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label">Subject</label>
+                        <p>@item.Subject</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label">SigningTime</label>
+                        <p>@item.SigningTime</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
 </div>
 <div>
     <a asp-action="Index">List</a>

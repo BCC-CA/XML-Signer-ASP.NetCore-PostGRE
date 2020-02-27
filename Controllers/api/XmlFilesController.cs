@@ -217,6 +217,7 @@ namespace XmlSigner.Controllers.api
                     xmlDocument.LoadXml(await Adapter.ReadAsStringAsync(xmlFile));
                     if (XmlSign.CheckIfDocumentPreviouslySigned(xmlDocument))
                     {
+                        var a =   XmlSign.GetAllSign(xmlDocument);
                         return XmlSign.VerifyAllSign(xmlDocument);
                     }
                     else

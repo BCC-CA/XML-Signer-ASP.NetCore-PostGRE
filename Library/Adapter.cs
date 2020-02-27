@@ -48,8 +48,7 @@ namespace XmlSigner.Library
         // Calling -> Adapter.DeSerializeFromXml<DemoData>(xmlDocument);
         internal static T DeSerializeFromXml<T>(XmlDocument xmlDocument)
         {
-            return (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(data));
-            //return (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(xmlDocument.OuterXml));
+            return (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(xmlDocument.OuterXml));
         }
     }
 }
