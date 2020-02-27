@@ -107,8 +107,10 @@ namespace XmlSigner.Controllers
             {
                 return NotFound();
             }
-
-            return View(new ApplicationSignViewModel(xmlFile));
+            ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile);
+            LeaveApplication la = await _context.LeaveApplication.FindAsync(asv.LeaveApplication.Id);
+            asv.LeaveApplication.LastSignedId = la.LastSignedId;
+            return View(asv);
         }
 
         // GET: LeaveApplications/Edit/5

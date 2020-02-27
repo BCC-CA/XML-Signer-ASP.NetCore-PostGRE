@@ -65,7 +65,13 @@
         </div>
     </div>
 
-    @if (Model.CertificateList?.Any() != true)
+    @if (Model.LeaveApplication.LastSignedId != null)
+    {
+        <h4 class="text-success">
+            You have already signed this document
+        </h4>
+    }
+    else if (Model.CertificateList?.Any() != true)
     {
         <h4>
             <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"

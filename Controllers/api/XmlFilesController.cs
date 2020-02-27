@@ -124,6 +124,7 @@ namespace XmlSigner.Controllers.api
             {
                 return BadRequest("A file Should be Uploaded");
             }
+            await _context.SaveChangesAsync();
             leaveApp.LastSignedId = uploadedFile.Id;
             _context.LeaveApplication.Update(leaveApp);
             await _context.SaveChangesAsync();
