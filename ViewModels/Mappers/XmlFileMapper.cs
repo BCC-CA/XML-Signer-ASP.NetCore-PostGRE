@@ -1,5 +1,4 @@
-﻿using System;
-using XmlSigner.Data;
+﻿using System.Threading.Tasks;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
 
@@ -8,7 +7,7 @@ namespace XmlSigner.ViewModels.Mappers
     public class XmlFileMapper
     {
         //Should implement manual mapper
-        internal static async System.Threading.Tasks.Task<XmlFile> MapFromXmlFileAddViewModelAsync(XmlFileAddViewModel xmlFileAddViewModel)
+        internal static async Task<XmlFile> MapFromXmlFileAddViewModelAsync(XmlFileAddViewModel xmlFileAddViewModel)
         {
             XmlFile xmlFile = new XmlFile();
             if (xmlFileAddViewModel.PreviousFileId != null)

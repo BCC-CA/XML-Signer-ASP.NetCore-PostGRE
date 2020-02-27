@@ -3,7 +3,7 @@ $(document).ready(function () {
     $.support.cors = true;
 
     $('.DatePicker').datepicker({
-        format: "dd/mm/yyyy",
+        format: "mm/dd/yyyy",
         autoclose: true,
         //title: "Select BD",
         todayHighlight: true,

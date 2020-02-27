@@ -6,7 +6,8 @@
     <title>@ViewData["Title"] - Xml Signer Title</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </environment>
     <environment exclude="Development">
         @*
@@ -46,7 +47,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="XmlFiles" asp-action="Index">Xml Files</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DemoDatas" asp-action="Index">Demo Data</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveApplications" asp-action="Index">Leave Applications</a>
                         </li>
                     </ul>
                 </div>

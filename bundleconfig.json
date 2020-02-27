@@ -3,8 +3,7 @@
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
       "wwwroot/lib/twitter-bootstrap/css/bootstrap.css",
-      //"wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker.css",
-      //"wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css",
+      "wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker.css",
       "wwwroot/css/site.css"
     ]
   },

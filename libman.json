@@ -46,7 +46,6 @@
       "destination": "wwwroot/lib/bootstrap-datepicker/",
       "files": [
         "css/bootstrap-datepicker.css",
-        "css/bootstrap-datepicker3.css",
         "js/bootstrap-datepicker.js"
       ]
     }

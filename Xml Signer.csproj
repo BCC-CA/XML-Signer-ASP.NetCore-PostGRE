@@ -7,6 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20200225071800_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200225071800_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200225082038_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200225082038_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200226155422_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200226155422_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200226163544_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200226163544_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200226163635_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200226163635_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200226165847_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200226165847_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200227053751_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200227053751_InitialMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Readme.md" />
   </ItemGroup>

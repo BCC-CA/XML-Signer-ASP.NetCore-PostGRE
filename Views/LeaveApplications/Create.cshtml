@@ -1,0 +1,85 @@
+﻿@model XmlSigner.Data.Models.LeaveApplication
+@using XmlSigner.Data.Models
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Leave Application</h4>
+<hr />
+
+<form asp-action="Create">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" autocomplete="off"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Designation" class="control-label"></label>
+                <input asp-for="Designation" class="form-control" autocomplete="off"/>
+                <span asp-validation-for="Designation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LeaveStart" class="control-label"></label>
+                <input asp-for="LeaveStart" readonly type="text" placeholder="Click to set start-date" class="DatePicker form-control" id="start_date">
+                <span asp-validation-for="LeaveStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LeaveEnd" class="control-label"></label>
+                <input asp-for="LeaveEnd" readonly type="text" placeholder="Click to set end-date" class="DatePicker form-control" id="end_date">
+                <span asp-validation-for="LeaveEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LeaveType" class="control-label"></label>
+                <select asp-for="LeaveType" asp-items="Html.GetEnumSelectList<LeaveType>()" class="form-control">
+                    <option disabled selected>-- Please Select a Leave Type --</option>
+                </select>
+                <span asp-validation-for="LeaveType" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="PurposeOfLeave" class="control-label"></label>
+                <textarea asp-for="PurposeOfLeave" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="PurposeOfLeave" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressDuringLeave" class="control-label"></label>
+                <textarea asp-for="AddressDuringLeave" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="AddressDuringLeave" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNoDuringLeave" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">+88</span>
+                    </div>
+                    <input asp-for="PhoneNoDuringLeave" class="form-control" type="tel" pattern="0[1-9]{3}-[0-9]{3}-[0-9]{3}" />
+                </div>
+                <span asp-validation-for="PhoneNoDuringLeave" class="text-danger"></span>
+            </div>
+            
+        </div>
+
+        <div class="col-md-6 col-centered">
+            <div class="form-group">
+                <input type="submit" value="Submit Application" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

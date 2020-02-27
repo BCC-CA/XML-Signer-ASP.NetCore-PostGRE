@@ -14,12 +14,15 @@ This app will also be used as user verification service.
 	- Update-Database			(Create all table)
 	- Script-migration
 	- Update-Database –TargetMigration: <name of last good migration>	(Restore from a good migration)
+	- Drop-Database				(Drop The Database)
+
+Create New Migration after dropping Current Migration-
+
+	Update-Database 0; Remove-Migration; Add-Migration InitialMigration -OutputDir "Data/Migrations"; Update-Database
 
 Create New DB after dropping DB-
 
-	- Drop-Database				(Drop The Database)
-	- Remove-Migration			(Remove Existing Migration)
-
+	Update-Database 0; Update-Database
 
 ## Initial Project Builder-
 
