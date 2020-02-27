@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
+using XmlSigner.ViewModels;
 
 namespace XmlSigner.Controllers
 {
@@ -79,11 +81,34 @@ namespace XmlSigner.Controllers
                     convertedXmlFile.Signer = user;
                     convertedXmlFile.SignerId = user.Id;
                 }
+                //return RedirectToAction("actionName", "controllerName", convertedXmlFile);
+
                 _context.XmlFiles.Add(convertedXmlFile);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Sign", "LeaveApplications", new
+                                                {
+                                                    id = convertedXmlFile.Id
+                                                });
             }
             return View(leaveApplication);
+        }
+
+        // GET: LeaveApplications/Sign/5
+        public async Task<IActionResult> Sign(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
+            if (xmlFile == null)
+            {
+                return NotFound();
+            }
+
+            return View(new ApplicationSignViewModel(xmlFile));
         }
 
         // GET: LeaveApplications/Edit/5

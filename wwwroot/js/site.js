@@ -39,11 +39,13 @@ $(document).ready(function () {
             success: function (data) {
                 alert(data);
                 console.log(data);
+                location.reload();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr);
                 console.log(ajaxOptions);
                 console.log(thrownError);
+                location.reload();
             }
         });
     });

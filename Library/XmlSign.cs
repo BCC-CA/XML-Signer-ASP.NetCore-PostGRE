@@ -134,6 +134,8 @@ namespace XmlSigner.Library
 
             document.LoadXml(((XmlElement)nodeList[nodeList.Count - 1]).OuterXml);
             string certString = document.GetElementsByTagName("X509Data")[0].InnerText;
+            //var timeString = Adapter.Base64DecodTime(document.GetElementsByTagName("Reference")[0].InnerText);
+            var timeString = document.GetElementsByTagName("Reference")[0].InnerText;
             /*...Decode text in cert here (may need to use Encoding, Base64, UrlEncode, etc) ending with 'data' being a byte array...*/
             return new X509Certificate2(Encoding.ASCII.GetBytes(certString));
         }

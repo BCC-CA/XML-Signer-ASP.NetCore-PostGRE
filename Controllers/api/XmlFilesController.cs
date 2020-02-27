@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -199,6 +201,38 @@ namespace XmlSigner.Controllers.api
         private bool XmlFileExists(long id)
         {
             return _context.XmlFiles.Any(e => e.Id == id);
+        }
+
+        // POST: api/XmlFiles/verify
+        [HttpPost("verify")]
+        public async Task<ActionResult<List<X509Certificate2>>> VerifyXmlFile([FromForm]IFormFile xmlFile)    //XmlFile xmlFile
+        {
+            List<X509Certificate2> signerCertificateList = new List<X509Certificate2>();
+
+            if (xmlFile.Length > 0)
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                try
+                {
+                    xmlDocument.LoadXml(await Adapter.ReadAsStringAsync(xmlFile));
+                    if (XmlSign.CheckIfDocumentPreviouslySigned(xmlDocument))
+                    {
+                        return XmlSign.VerifyAllSign(xmlDocument);
+                    }
+                    else
+                    {
+                        return BadRequest("Uploaded file has no sign");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("The file is compromised");
+                }
+            }
+            else
+            {
+                return BadRequest("A file Should be Uploaded");
+            }
         }
     }
 }

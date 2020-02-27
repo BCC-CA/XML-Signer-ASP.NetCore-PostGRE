@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using XmlSigner.Data.Models;
 
 namespace XmlSigner.ViewModels
 {
