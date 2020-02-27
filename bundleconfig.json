@@ -26,6 +26,6 @@
       "alwaysEscapeNonAscii": true,
       "commentMode": "none"
     },
-    "sourceMap": true
+    "sourceMap": false
   }
 ]
