@@ -89,7 +89,7 @@ namespace XmlSigner.Controllers
                 _context.LeaveApplication.Update(leaveApplication);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
-                return RedirectToAction(nameof(Sign), nameof(LeaveApplicationsController)
+                return RedirectToAction(nameof(Sign), "LeaveApplications"
                                             , new {
                                                     id = leaveApplication.Id
                                             });

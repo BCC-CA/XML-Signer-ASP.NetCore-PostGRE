@@ -65,37 +65,25 @@
         </div>
     </div>
 
-    @*
-            @if (Model.LeaveApplication.LastSignedId != null)
-            {
-                <h4 class="text-success">
-                    You have already signed this document
-                </h4>
-            }
-            else
-
-        @if (Model.CertificateList?.Any() != true)
-        {
-            <h4>
-                <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
-                   class="btn btn-outline-danger sign_file"
-                   file_id="@Model.XmlFile.Id"
-                   role="button">
-                    Sign Application
-                </a>
-            </h4>
-        }
-        else
-        {*@
-    <h4>
-        <textarea id="signingReason"></textarea>
-        <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
-           class="btn btn-outline-danger sign_file"
-           file_id="@Model.XmlFile.Id"
-           role="button">
-            Sign Application
-        </a>
-    </h4>
+    
+    @if (Model.CertificateList?.Any() == true)
+    {
+        <h4 class="text-success">
+            You have already signed this document
+        </h4>
+    }
+    else
+    {
+        <h4>
+            <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
+                class="btn btn-outline-danger sign_file"
+                file_id="@Model.XmlFile.Id"
+                role="button">
+                Sign Application
+            </a>
+        </h4>
+    }
+        
     @if (Model.CertificateList?.Any() == true)
     {
         <div class="container">
@@ -119,9 +107,8 @@
             }
         </div>
     }
-
-    @*}*@
 </div>
+
 <div>
     <a asp-action="Index">List</a>
 </div>
