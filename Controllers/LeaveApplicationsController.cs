@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +12,7 @@ using XmlSigner.ViewModels;
 
 namespace XmlSigner.Controllers
 {
+    [Authorize]
     public class LeaveApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -67,7 +68,7 @@ namespace XmlSigner.Controllers
                 {
                     leaveApplication.ApplicantId = currentUser.Id;
                 }
-                _context.Add(leaveApplication);
+                _context.LeaveApplication.Add(leaveApplication);
                 await _context.SaveChangesAsync();
                 XmlFile convertedXmlFile = new XmlFile(
                                                         Adapter.SerializeToXml(leaveApplication).OuterXml,
@@ -81,15 +82,17 @@ namespace XmlSigner.Controllers
                     convertedXmlFile.Signer = user;
                     convertedXmlFile.SignerId = user.Id;
                 }
-                //return RedirectToAction("actionName", "controllerName", convertedXmlFile);
-
                 _context.XmlFiles.Add(convertedXmlFile);
                 await _context.SaveChangesAsync();
+                leaveApplication.PreviousSignedFile = convertedXmlFile;
+                leaveApplication.LastSignedId = convertedXmlFile.Id;
+                _context.LeaveApplication.Update(leaveApplication);
+                await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
-                return RedirectToAction("Sign", "LeaveApplications", new
-                                                {
-                                                    id = convertedXmlFile.Id
-                                                });
+                return RedirectToAction(nameof(Sign), nameof(LeaveApplicationsController)
+                                            , new {
+                                                    id = leaveApplication.Id
+                                            });
             }
             return View(leaveApplication);
         }
@@ -101,15 +104,30 @@ namespace XmlSigner.Controllers
             {
                 return NotFound();
             }
-
-            XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
+            LeaveApplication leaveApp = await _context.LeaveApplication.FindAsync(id);
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(leaveApp.LastSignedId);
             if (xmlFile == null)
             {
                 return NotFound();
             }
             ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile);
-            LeaveApplication la = await _context.LeaveApplication.FindAsync(asv.LeaveApplication.Id);
-            asv.LeaveApplication.LastSignedId = la.LastSignedId;
+            return View(asv);
+        }
+
+        // GET: LeaveApplications/Sign/5
+        public async Task<IActionResult> Approve(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            LeaveApplication leaveApp = await _context.LeaveApplication.FindAsync(id);
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(leaveApp.LastSignedId);
+            if (xmlFile == null)
+            {
+                return NotFound();
+            }
+            ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile);
             return View(asv);
         }
 

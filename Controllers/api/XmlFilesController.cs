@@ -43,11 +43,11 @@ namespace XmlSigner.Controllers.api
             }
             DownloadUploadToken dut = new DownloadUploadToken("Reason", TableName.LeaveApplication, id);
             dut.Signer = await _userManager.GetUserAsync(User);
-            if (xmlFile.DownloadUploadTokens == null)
+            /*if (xmlFile.DownloadUploadTokens == null)
             {
                 xmlFile.DownloadUploadTokens = new List<DownloadUploadToken>();
             }
-            xmlFile.DownloadUploadTokens.Add(dut);
+            xmlFile.DownloadUploadTokens.Add(dut);*/
             _context.DownloadUploadToken.Add(dut);
             _context.XmlFiles.Update(xmlFile);
             await _context.SaveChangesAsync();
@@ -126,6 +126,7 @@ namespace XmlSigner.Controllers.api
             }
             await _context.SaveChangesAsync();
             leaveApp.LastSignedId = uploadedFile.Id;
+            leaveApp.PreviousSignedFile = uploadedFile;
             _context.LeaveApplication.Update(leaveApp);
             await _context.SaveChangesAsync();
             return uploadedFile.Id;

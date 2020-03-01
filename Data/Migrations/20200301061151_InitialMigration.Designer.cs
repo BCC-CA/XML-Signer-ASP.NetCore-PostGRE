@@ -10,7 +10,7 @@ using XmlSigner.Data;
 namespace XmlSigner.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200227065007_InitialMigration")]
+    [Migration("20200301061151_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -265,14 +265,9 @@ namespace XmlSigner.Data.Migrations
                     b.Property<DateTime?>("UploadTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<long?>("XmlFileId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SignerId");
-
-                    b.HasIndex("XmlFileId");
 
                     b.ToTable("DownloadUploadToken");
                 });
@@ -352,6 +347,8 @@ namespace XmlSigner.Data.Migrations
                         .HasMaxLength(32767);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LastSignedId");
 
                     b.ToTable("LeaveApplication");
                 });
@@ -470,10 +467,13 @@ namespace XmlSigner.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<long>", "Signer")
                         .WithMany()
                         .HasForeignKey("SignerId");
+                });
 
-                    b.HasOne("XmlSigner.Data.Models.XmlFile", null)
-                        .WithMany("DownloadUploadTokens")
-                        .HasForeignKey("XmlFileId");
+            modelBuilder.Entity("XmlSigner.Data.Models.LeaveApplication", b =>
+                {
+                    b.HasOne("XmlSigner.Data.Models.XmlFile", "PreviousSignedFile")
+                        .WithMany()
+                        .HasForeignKey("LastSignedId");
                 });
 
             modelBuilder.Entity("XmlSigner.Data.Models.XmlFile", b =>

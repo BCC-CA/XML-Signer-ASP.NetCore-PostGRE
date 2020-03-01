@@ -62,5 +62,7 @@ namespace XmlSigner.Data.Models
         [Column("LastSignedId"), Display(Name = "Last Signed/Unsigned File", Prompt = "Please select Previous File")]
         public long? LastSignedId { get; set; }
         //No Abstract object can be a element in this class because it is going to be serialized
+        [ForeignKey("LastSignedId"), Display(Name = "Previous Signed/Unsigned File", Prompt = "Please Select Previous File")]
+        public virtual XmlFile PreviousSignedFile { get; set; }
     }
 }

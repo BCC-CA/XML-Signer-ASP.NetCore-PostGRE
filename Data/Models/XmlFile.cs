@@ -21,7 +21,7 @@ namespace XmlSigner.Data.Models
             DbEntryId = dbEntryId;
             FileRealName = fileName;
             TableName = tableName;
-            DownloadUploadTokens = new List<DownloadUploadToken>();
+            //DownloadUploadTokens = new List<DownloadUploadToken>();
         }
 
         [IgnoreDataMember]
@@ -50,6 +50,6 @@ namespace XmlSigner.Data.Models
         [ForeignKey("PreviousFileId"), Display(Name = "Previous Signed/Unsigned File", Prompt = "Please Select Previous File")]
         public virtual XmlFile PreviousSignedFile { get; set; }
 
-        public ICollection<DownloadUploadToken> DownloadUploadTokens { get; set; }
+        //public ICollection<DownloadUploadToken> DownloadUploadTokens { get; set; }
     }
 }
