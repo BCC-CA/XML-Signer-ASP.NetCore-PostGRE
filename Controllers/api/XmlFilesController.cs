@@ -132,6 +132,17 @@ namespace XmlSigner.Controllers.api
             return uploadedFile.Id;
         }
 
+        // POST: api/XmlFiles
+        [HttpPost, Route("api/controller/search")]
+        public Task<ActionResult<bool>> UpdateApplicationStatus([FromForm]string LeaveFormId, [FromForm]ApplicationStatus Status)
+        {
+            if(ApplicationStatus.Approved == Status)
+            {
+                return null;
+            }
+            return null;
+        }
+
         // GET: api/XmlFiles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<XmlFile>>> GetXmlFiles()
@@ -229,7 +240,7 @@ namespace XmlSigner.Controllers.api
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("The file is compromised");
+                    return BadRequest("The file is compromised - " + ex.ToString());
                 }
             }
             else

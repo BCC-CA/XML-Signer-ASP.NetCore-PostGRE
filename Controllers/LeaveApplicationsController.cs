@@ -114,6 +114,15 @@ namespace XmlSigner.Controllers
             return View(asv);
         }
 
+        // GET: LeaveApplications/ApproveList
+        public async Task<IActionResult> ApproveList()
+        {
+            return View(
+                    await _context.LeaveApplication
+                            .ToListAsync()
+                );
+        }
+
         // GET: LeaveApplications/Sign/5
         public async Task<IActionResult> Approve(long? id)
         {

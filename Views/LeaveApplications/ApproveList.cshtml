@@ -1,0 +1,103 @@
+﻿@model IEnumerable<XmlSigner.Data.Models.LeaveApplication>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Designation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveEnd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurposeOfLeave)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressDuringLeave)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNoDuringLeave)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationStatus)
+            </th>
+            @*
+            <th>
+                @Html.DisplayNameFor(model => model.CreateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastUpdateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeletionTime)
+            </th>
+            *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Designation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeaveStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeaveEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeaveType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurposeOfLeave)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddressDuringLeave)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNoDuringLeave)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationStatus)
+            </td>
+            @*
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastUpdateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeletionTime)
+            </td>
+            *@
+            <td>
+                <a asp-action="Approve" asp-route-id="@item.Id">Approve</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

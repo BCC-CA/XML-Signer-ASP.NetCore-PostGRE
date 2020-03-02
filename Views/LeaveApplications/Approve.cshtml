@@ -1,7 +1,7 @@
 ﻿@model XmlSigner.ViewModels.ApplicationSignViewModel
 
 @{
-    ViewData["Title"] = "Leave Application - Sign";
+    ViewData["Title"] = "Leave Application - Approve";
 }
 
 <h1>Verify</h1>
@@ -65,32 +65,24 @@
         </div>
     </div>
 
-    <form class="row rounded-lg">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="LeaveApplication.Name" class="control-label"></label>
-                <input asp-for="LeaveApplication.Name" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.Name" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="LeaveApplication.Name" class="control-label"></label>
-                <input asp-for="LeaveApplication.Name" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.Name" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
-                   class="btn btn-outline-danger sign_file"
-                   file_id="@Model.XmlFile.Id"
-                   role="button">
-                    Approve Application
-                </a>
-            </div>
-        </div>
-    </form>
+
+    @if (Model.CertificateList?.Any() == true)  @* Model.LeaveApplication.ApplicationStatus *@
+    {
+        <h4 class="text-success">
+            You have already signed this document
+        </h4>
+    }
+    else
+    {
+        <h4>
+            <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
+               class="btn btn-outline-danger sign_file"
+               file_id="@Model.XmlFile.Id"
+               role="button">
+                Sign Application
+            </a>
+        </h4>
+    }
 
     @if (Model.CertificateList?.Any() == true)
     {
@@ -116,6 +108,7 @@
         </div>
     }
 </div>
+
 <div>
     <a asp-action="Index">List</a>
 </div>
