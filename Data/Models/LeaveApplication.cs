@@ -17,17 +17,19 @@ namespace XmlSigner.Data.Models
         [Display(Name = "Sick Leave")]
         Sick
     }
+
     public enum ApplicationStatus
     {
-        [Display(Name = "Application processing not started yet")]
+        [Display(Name = "Application is Processing")]
         Applied = 0,
-        [Display(Name = "Application Forwarded")]
+        /*[Display(Name = "Application Forwarded")]
         Forwarded,
         [Display(Name = "Application Forwarde Approved")]
-        Forward_Confirmed,
+        Forward_Confirmed,*/
         [Display(Name = "Application Approved")]
         Approved
     }
+
     public class LeaveApplication : BaseModel
     {
         [Column("ApplicantId"), Display(Name = "Applicant Id", Prompt = "Please Choose Applicant Id")]

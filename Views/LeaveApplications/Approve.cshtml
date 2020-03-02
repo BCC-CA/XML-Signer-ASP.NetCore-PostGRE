@@ -65,23 +65,40 @@
         </div>
     </div>
 
+    <hr />
 
-    @if (Model.CertificateList?.Any() == true)  @* Model.LeaveApplication.ApplicationStatus *@
+    @if (Model.LeaveApplication.ApplicationStatus == XmlSigner.Data.Models.ApplicationStatus.Approved)
     {
         <h4 class="text-success">
-            You have already signed this document
+            This application is already approved
         </h4>
     }
     else
     {
-        <h4>
-            <a href="#xml_signer:\\@Context.Request.Host@Context.Request.Path"
-               class="btn btn-outline-danger sign_file"
-               file_id="@Model.XmlFile.Id"
-               role="button">
-                Sign Application
-            </a>
-        </h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.ApplicationStatus" class="control-label"></label>
+                    <select asp-for="LeaveApplication.ApplicationStatus" asp-items="Html.GetEnumSelectList<XmlSigner.Data.Models.ApplicationStatus>()" class="form-control" id="application-status">
+                        <option disabled selected>-- Please Select a Status --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <a href="#"
+                       class="btn btn-outline-danger approve_application"
+                       file_id="@Model.XmlFile.Id"
+                       role="button">
+                        Sign And Approve
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Comment</label>
+                    <textarea class="form-control" rows="4" id="reason"></textarea>
+                </div>
+            </div>
+        </div>
     }
 
     @if (Model.CertificateList?.Any() == true)

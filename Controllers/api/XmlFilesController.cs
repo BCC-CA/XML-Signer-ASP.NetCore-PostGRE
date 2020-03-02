@@ -17,6 +17,7 @@ using XmlSigner.Library;
 
 namespace XmlSigner.Controllers.api
 {
+    //[Route("api/[controller]/[action]")]
     [Route("api/[controller]")]
     [ApiController]
     public class XmlFilesController : ControllerBase
@@ -133,14 +134,32 @@ namespace XmlSigner.Controllers.api
         }
 
         // POST: api/XmlFiles
-        [HttpPost, Route("api/controller/search")]
-        public Task<ActionResult<bool>> UpdateApplicationStatus([FromForm]string LeaveFormId, [FromForm]ApplicationStatus Status)
+        //[HttpPost, Route("api/[controller]/search")]
+        [Authorize]
+        [HttpPost("UpdateApplicationStatus")] // Matches POST 'api/XmlFiles/UpdateApplicationStatus'
+        public async Task<ActionResult<bool>> UpdateApplicationStatusAsync([FromForm]long xml_file_id, [FromForm]ApplicationStatus status, [FromForm]string reason)
         {
-            if(ApplicationStatus.Approved == Status)
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(xml_file_id);
+            if (xmlFile == null)
             {
-                return null;
+                return NotFound();
             }
-            return null;
+            LeaveApplication application = await _context.LeaveApplication.FindAsync(xmlFile.DbEntryId);
+            if (application == null)
+            {
+                return NotFound("Application not found");
+            }
+            if (application.ApplicationStatus != status)
+            {
+                application.ApplicationStatus = status;
+                _context.LeaveApplication.Update(application);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            if (ApplicationStatus.Approved == status)
+                return null;
+            else
+                return false;
         }
 
         // GET: api/XmlFiles

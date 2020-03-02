@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using XmlSigner.Data;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
 using XmlSigner.Library.Model;
@@ -8,6 +9,13 @@ namespace XmlSigner.ViewModels
 {
     public class ApplicationSignViewModel
     {
+        /*private readonly ApplicationDbContext _context;
+
+        public ApplicationSignViewModel(ApplicationDbContext context)
+        {
+            _context = context;
+        }*/
+
         public XmlFile XmlFile { get; set; }
         public LeaveApplication LeaveApplication { get; set; }
         public List<Certificate> CertificateList { get; set; }
@@ -19,6 +27,7 @@ namespace XmlSigner.ViewModels
             xmlDoc.LoadXml(XmlFile.FileContent);
             LeaveApplication = Adapter.DeSerializeFromXml<LeaveApplication>(xmlDoc);
             CertificateList = XmlSign.GetAllSign(xmlDoc);
+            //var application = await _context.
         }
     }
 }
