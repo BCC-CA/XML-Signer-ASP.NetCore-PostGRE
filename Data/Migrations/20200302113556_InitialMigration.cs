@@ -156,7 +156,7 @@ namespace XmlSigner.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DownloadUploadToken",
+                name: "DownloadUploadTokens",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -175,9 +175,9 @@ namespace XmlSigner.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DownloadUploadToken", x => x.Id);
+                    table.PrimaryKey("PK_DownloadUploadTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DownloadUploadToken_AspNetUsers_SignerId",
+                        name: "FK_DownloadUploadTokens_AspNetUsers_SignerId",
                         column: x => x.SignerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -219,7 +219,7 @@ namespace XmlSigner.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LeaveApplication",
+                name: "LeaveApplications",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -241,9 +241,9 @@ namespace XmlSigner.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeaveApplication", x => x.Id);
+                    table.PrimaryKey("PK_LeaveApplications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LeaveApplication_XmlFiles_LastSignedId",
+                        name: "FK_LeaveApplications_XmlFiles_LastSignedId",
                         column: x => x.LastSignedId,
                         principalTable: "XmlFiles",
                         principalColumn: "Id",
@@ -288,13 +288,13 @@ namespace XmlSigner.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_DownloadUploadToken_SignerId",
-                table: "DownloadUploadToken",
+                name: "IX_DownloadUploadTokens_SignerId",
+                table: "DownloadUploadTokens",
                 column: "SignerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LeaveApplication_LastSignedId",
-                table: "LeaveApplication",
+                name: "IX_LeaveApplications_LastSignedId",
+                table: "LeaveApplications",
                 column: "LastSignedId");
 
             migrationBuilder.CreateIndex(
@@ -326,10 +326,10 @@ namespace XmlSigner.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DownloadUploadToken");
+                name: "DownloadUploadTokens");
 
             migrationBuilder.DropTable(
-                name: "LeaveApplication");
+                name: "LeaveApplications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

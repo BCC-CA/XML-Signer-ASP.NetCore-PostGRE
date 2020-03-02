@@ -49,7 +49,7 @@ namespace XmlSigner.Controllers.api
                 xmlFile.DownloadUploadTokens = new List<DownloadUploadToken>();
             }
             xmlFile.DownloadUploadTokens.Add(dut);*/
-            _context.DownloadUploadToken.Add(dut);
+            _context.DownloadUploadTokens.Add(dut);
             _context.XmlFiles.Update(xmlFile);
             await _context.SaveChangesAsync();
 
@@ -60,7 +60,7 @@ namespace XmlSigner.Controllers.api
         [HttpGet("{token}/{id}")]
         public async Task<IActionResult> DownloadXmlFile(long id, string token)
         {
-            DownloadUploadToken dut = await _context.DownloadUploadToken
+            DownloadUploadToken dut = await _context.DownloadUploadTokens
                                                 .Where(d => d.IsUsed == false)
                                                 .Where(d => d.TableName == TableName.LeaveApplication)
                                                 .Where(d => d.ExpirityTime >= DateTime.UtcNow)
@@ -89,7 +89,7 @@ namespace XmlSigner.Controllers.api
         public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long? previousFileId, [FromForm]string token)    //XmlFile xmlFile
         {
             XmlFile uploadedFile = new XmlFile();
-            DownloadUploadToken dut = await _context.DownloadUploadToken
+            DownloadUploadToken dut = await _context.DownloadUploadTokens
                                             .Where(d => d.IsUsed == false)
                                             .Where(d => d.TableName == TableName.LeaveApplication)
                                             .Where(d => d.ExpirityTime >= DateTime.UtcNow)
@@ -101,7 +101,7 @@ namespace XmlSigner.Controllers.api
                 return BadRequest("Token Not Found");
             }
             dut.MarkAsUsed();
-            _context.DownloadUploadToken.Update(dut);
+            _context.DownloadUploadTokens.Update(dut);
 
             uploadedFile.PreviousSignedFile = await _context.XmlFiles.FindAsync(previousFileId);
             if(uploadedFile.PreviousSignedFile == null)
@@ -120,7 +120,7 @@ namespace XmlSigner.Controllers.api
                 return BadRequest("A file Should be Uploaded");
             }
             _context.XmlFiles.Add(uploadedFile);
-            LeaveApplication leaveApp = await _context.LeaveApplication.FindAsync(uploadedFile.DbEntryId);
+            LeaveApplication leaveApp = await _context.LeaveApplications.FindAsync(uploadedFile.DbEntryId);
             if(leaveApp == null)
             {
                 return BadRequest("A file Should be Uploaded");
@@ -128,7 +128,7 @@ namespace XmlSigner.Controllers.api
             await _context.SaveChangesAsync();
             leaveApp.LastSignedId = uploadedFile.Id;
             leaveApp.PreviousSignedFile = uploadedFile;
-            _context.LeaveApplication.Update(leaveApp);
+            _context.LeaveApplications.Update(leaveApp);
             await _context.SaveChangesAsync();
             return uploadedFile.Id;
         }
@@ -144,7 +144,7 @@ namespace XmlSigner.Controllers.api
             {
                 return NotFound();
             }
-            LeaveApplication application = await _context.LeaveApplication.FindAsync(xmlFile.DbEntryId);
+            LeaveApplication application = await _context.LeaveApplications.FindAsync(xmlFile.DbEntryId);
             if (application == null)
             {
                 return NotFound("Application not found");
@@ -152,7 +152,7 @@ namespace XmlSigner.Controllers.api
             if (application.ApplicationStatus != status)
             {
                 application.ApplicationStatus = status;
-                _context.LeaveApplication.Update(application);
+                _context.LeaveApplications.Update(application);
                 await _context.SaveChangesAsync();
                 return true;
             }

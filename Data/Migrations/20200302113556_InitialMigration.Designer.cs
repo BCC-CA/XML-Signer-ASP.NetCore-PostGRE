@@ -10,7 +10,7 @@ using XmlSigner.Data;
 namespace XmlSigner.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200302054525_InitialMigration")]
+    [Migration("20200302113556_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -269,7 +269,7 @@ namespace XmlSigner.Data.Migrations
 
                     b.HasIndex("SignerId");
 
-                    b.ToTable("DownloadUploadToken");
+                    b.ToTable("DownloadUploadTokens");
                 });
 
             modelBuilder.Entity("XmlSigner.Data.Models.LeaveApplication", b =>
@@ -350,7 +350,7 @@ namespace XmlSigner.Data.Migrations
 
                     b.HasIndex("LastSignedId");
 
-                    b.ToTable("LeaveApplication");
+                    b.ToTable("LeaveApplications");
                 });
 
             modelBuilder.Entity("XmlSigner.Data.Models.XmlFile", b =>
