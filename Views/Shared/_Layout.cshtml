@@ -7,20 +7,15 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="~/lib/datatables/css/jquery.dataTables.css">
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </environment>
     <environment exclude="Development">
-        @*
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+        <link rel="stylesheet" href="~/css/site.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only"
               asp-fallback-test-property="position"
-              asp-fallback-test-value="absolute" />
-        *@
-        <link rel="stylesheet" href="~/css/site.min.css"
               asp-append-version="true"
-              asp-fallback-test-class="sr-only"
-              asp-fallback-test-property="position"
               asp-fallback-test-value="absolute"
               />
     </environment>
@@ -80,6 +75,7 @@
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/microsoft-signalr/dist/browser/signalr.js"></script>
         <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
