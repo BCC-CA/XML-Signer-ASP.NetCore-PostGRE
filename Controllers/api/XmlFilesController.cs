@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
+using XmlSigner.Library.Model;
 
 namespace XmlSigner.Controllers.api
 {
@@ -237,7 +238,8 @@ namespace XmlSigner.Controllers.api
 
         // POST: api/XmlFiles/verify
         [HttpPost("verify")]
-        public async Task<ActionResult<List<X509Certificate2>>> VerifyXmlFile([FromForm]IFormFile xmlFile)    //XmlFile xmlFile
+        //public async Task<ActionResult<List<X509Certificate2>>> VerifyXmlFile([FromForm]IFormFile xmlFile)
+        public async Task<ActionResult<List<Certificate>>> VerifyXmlFile([FromForm]IFormFile xmlFile)
         {
             List<X509Certificate2> signerCertificateList = new List<X509Certificate2>();
 
@@ -249,8 +251,8 @@ namespace XmlSigner.Controllers.api
                     xmlDocument.LoadXml(await Adapter.ReadAsStringAsync(xmlFile));
                     if (XmlSign.CheckIfDocumentPreviouslySigned(xmlDocument))
                     {
-                        var a =   XmlSign.GetAllSign(xmlDocument);
-                        return XmlSign.VerifyAllSign(xmlDocument);
+                        return XmlSign.GetAllSign(xmlDocument);
+                        //return XmlSign.VerifyAllSign(xmlDocument);
                     }
                     else
                     {

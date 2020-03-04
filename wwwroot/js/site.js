@@ -91,6 +91,18 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('#leave-application').DataTable({
+        "ajax": "https://localhost:44361/data.json",
+        "columns": [
+            { "data": "name" },
+            { "data": "position" },
+            { "data": "office" },
+            { "data": "extn" },
+            { "data": "start_date" },
+            { "data": "salary" }
+        ]
+    });
 });
 
 function updateApplicationStatus(id, application_status, reasaon, baseUrl) {

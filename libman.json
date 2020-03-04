@@ -48,6 +48,14 @@
         "css/bootstrap-datepicker.css",
         "js/bootstrap-datepicker.js"
       ]
+    },
+    {
+      "library": "datatables@1.10.19",
+      "destination": "wwwroot/lib/datatables/",
+      "files": [
+        "js/jquery.dataTables.min.js",
+        "css/jquery.dataTables.css"
+      ]
     }
   ]
 }
