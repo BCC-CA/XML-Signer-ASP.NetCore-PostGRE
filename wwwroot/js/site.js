@@ -93,7 +93,26 @@ $(document).ready(function () {
     });
 
     $('#leave-application').DataTable({
-        "ajax": "https://localhost:44361/data.json",
+        "processing": true,
+        "serverSide": true,
+        "ajax":
+        {
+            //headers: {  },
+            headers: {
+                //'X-CSRF-TOKEN': $('meta[name=_token]').attr("content"),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            //$('meta[name=datatable_ajax_url]').attr("content")
+            url: "api/Datatables/LeaveApplications",
+            type: "POST",
+            dataType: "json",
+            error: function () {  // error handling
+                $(".category-datatable-error").html("");
+                $("#category-datatable").append('<tbody class="category-datatable-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                $("#category-datatable_processing").css("display", "none");
+            }
+        },
         "columns": [
             { "data": "name" },
             { "data": "position" },
