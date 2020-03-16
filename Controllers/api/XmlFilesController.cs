@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +14,11 @@ using Microsoft.EntityFrameworkCore;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
+using XmlSigner.Library.Model;
 
 namespace XmlSigner.Controllers.api
 {
+    //[Route("api/[controller]/[action]")]
     [Route("api/[controller]")]
     [ApiController]
     public class XmlFilesController : ControllerBase
@@ -26,36 +32,47 @@ namespace XmlSigner.Controllers.api
             _userManager = userManager;
         }
 
-        // POST: api/XmlFiles
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long? previousFileId)    //XmlFile xmlFile
+        // GET: api/XmlFiles/token/9
+        [Authorize]
+        [HttpGet("token/{id}")]
+        public async Task<ActionResult<string>> GetXmlFileDownloadToken(long id)
         {
-            XmlFile uploadedFile = new XmlFile();
-            if (previousFileId != null)
+            //Should add token verification
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
+            if (xmlFile == null)
             {
-                uploadedFile.PreviousSignedFile = await _context.XmlFiles.FindAsync(previousFileId);
+                return BadRequest("File Not Found");
             }
-            if (xmlFile.Length > 0)
+            DownloadUploadToken dut = new DownloadUploadToken("Reason", TableName.LeaveApplication, id);
+            dut.Signer = await _userManager.GetUserAsync(User);
+            /*if (xmlFile.DownloadUploadTokens == null)
             {
-                uploadedFile.FileContent = await Adapter.ReadAsStringAsync(xmlFile);
-                uploadedFile.FileRealName = xmlFile.FileName;
-                uploadedFile.Signer = await _userManager.GetUserAsync(User);
+                xmlFile.DownloadUploadTokens = new List<DownloadUploadToken>();
             }
-            else
-            {
-                return BadRequest("A file Should be Uploaded");
-            }
-            _context.XmlFiles.Add(uploadedFile);
+            xmlFile.DownloadUploadTokens.Add(dut);*/
+            _context.DownloadUploadTokens.Add(dut);
+            _context.XmlFiles.Update(xmlFile);
             await _context.SaveChangesAsync();
-            return uploadedFile.Id;
+
+            return dut.Token;
         }
 
-        // GET: api/XmlFiles/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> DownloadXmlFile(long id)
+        // GET: api/XmlFiles/asdasd234/9
+        [HttpGet("{token}/{id}")]
+        public async Task<IActionResult> DownloadXmlFile(long id, string token)
         {
+            DownloadUploadToken dut = await _context.DownloadUploadTokens
+                                                .Where(d => d.IsUsed == false)
+                                                .Where(d => d.TableName == TableName.LeaveApplication)
+                                                .Where(d => d.ExpirityTime >= DateTime.UtcNow)
+                                                .Where(d => d.DbEntryId == id)
+                                                .Where(d => d.Token.Equals(token))
+                                                .FirstOrDefaultAsync();
+
+            if (dut == null)
+            {
+                return BadRequest("Token Not Found");
+            }
             XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
             if (xmlFile == null)
             {
@@ -64,6 +81,86 @@ namespace XmlSigner.Controllers.api
             byte[] byteArray = Encoding.UTF8.GetBytes(xmlFile.FileContent);
             MemoryStream fileStream = new MemoryStream(byteArray);
             return File(fileStream, "application/ocet-stream", xmlFile.FileRealName);
+        }
+
+        // POST: api/XmlFiles
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        public async Task<ActionResult<long>> UploadXmlFile([FromForm]IFormFile xmlFile, [FromForm]long? previousFileId, [FromForm]string token)    //XmlFile xmlFile
+        {
+            XmlFile uploadedFile = new XmlFile();
+            DownloadUploadToken dut = await _context.DownloadUploadTokens
+                                            .Where(d => d.IsUsed == false)
+                                            .Where(d => d.TableName == TableName.LeaveApplication)
+                                            .Where(d => d.ExpirityTime >= DateTime.UtcNow)
+                                            .Where(d => d.Token.Equals(token))
+                                            //.Where(d => d.Signer == user)
+                                            .FirstOrDefaultAsync();
+            if (dut == null)
+            {
+                return BadRequest("Token Not Found");
+            }
+            dut.MarkAsUsed();
+            _context.DownloadUploadTokens.Update(dut);
+
+            uploadedFile.PreviousSignedFile = await _context.XmlFiles.FindAsync(previousFileId);
+            if(uploadedFile.PreviousSignedFile == null)
+            {
+                return BadRequest("Valid Token and previous file ID don't match");
+            }
+            if (xmlFile.Length > 0)
+            {
+                uploadedFile.Signer = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == dut.SignerId);
+                uploadedFile.FileContent = await Adapter.ReadAsStringAsync(xmlFile);
+                uploadedFile.FileRealName = xmlFile.FileName;
+                uploadedFile.DbEntryId = uploadedFile.PreviousSignedFile.DbEntryId;
+            }
+            else
+            {
+                return BadRequest("A file Should be Uploaded");
+            }
+            _context.XmlFiles.Add(uploadedFile);
+            LeaveApplication leaveApp = await _context.LeaveApplications.FindAsync(uploadedFile.DbEntryId);
+            if(leaveApp == null)
+            {
+                return BadRequest("A file Should be Uploaded");
+            }
+            await _context.SaveChangesAsync();
+            leaveApp.LastSignedId = uploadedFile.Id;
+            leaveApp.PreviousSignedFile = uploadedFile;
+            _context.LeaveApplications.Update(leaveApp);
+            await _context.SaveChangesAsync();
+            return uploadedFile.Id;
+        }
+
+        // POST: api/XmlFiles
+        //[HttpPost, Route("api/[controller]/search")]
+        [Authorize]
+        [HttpPost("UpdateApplicationStatus")] // Matches POST 'api/XmlFiles/UpdateApplicationStatus'
+        public async Task<ActionResult<bool>> UpdateApplicationStatusAsync([FromForm]long xml_file_id, [FromForm]ApplicationStatus status, [FromForm]string reason)
+        {
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(xml_file_id);
+            if (xmlFile == null)
+            {
+                return NotFound();
+            }
+            LeaveApplication application = await _context.LeaveApplications.FindAsync(xmlFile.DbEntryId);
+            if (application == null)
+            {
+                return NotFound("Application not found");
+            }
+            if (application.ApplicationStatus != status)
+            {
+                application.ApplicationStatus = status;
+                _context.LeaveApplications.Update(application);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            if (ApplicationStatus.Approved == status)
+                return null;
+            else
+                return false;
         }
 
         // GET: api/XmlFiles
@@ -137,6 +234,40 @@ namespace XmlSigner.Controllers.api
         private bool XmlFileExists(long id)
         {
             return _context.XmlFiles.Any(e => e.Id == id);
+        }
+
+        // POST: api/XmlFiles/verify
+        [HttpPost("verify")]
+        //public async Task<ActionResult<List<X509Certificate2>>> VerifyXmlFile([FromForm]IFormFile xmlFile)
+        public async Task<ActionResult<List<Certificate>>> VerifyXmlFile([FromForm]IFormFile xmlFile)
+        {
+            List<X509Certificate2> signerCertificateList = new List<X509Certificate2>();
+
+            if (xmlFile.Length > 0)
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                try
+                {
+                    xmlDocument.LoadXml(await Adapter.ReadAsStringAsync(xmlFile));
+                    if (XmlSign.CheckIfDocumentPreviouslySigned(xmlDocument))
+                    {
+                        return XmlSign.GetAllSign(xmlDocument);
+                        //return XmlSign.VerifyAllSign(xmlDocument);
+                    }
+                    else
+                    {
+                        return BadRequest("Uploaded file has no sign");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("The file is compromised - " + ex.ToString());
+                }
+            }
+            else
+            {
+                return BadRequest("A file Should be Uploaded");
+            }
         }
     }
 }

@@ -3,6 +3,8 @@
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
       "wwwroot/lib/twitter-bootstrap/css/bootstrap.css",
+      "wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker.css",
+      "wwwroot/lib/datatables/css/dataTables.bootstrap4.css",
       "wwwroot/css/site.css"
     ]
   },
@@ -14,6 +16,8 @@
       "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
       "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
       "wwwroot/lib/microsoft-signalr/dist/browser/signalr.js",
+      "wwwroot/lib/bootstrap-datepicker/js/bootstrap-datepicker.js",
+      "wwwroot/lib/datatables/js/dataTables.bootstrap4.js",
       "wwwroot/js/site.js"
     ],
     "minify": {
@@ -24,6 +28,6 @@
       "alwaysEscapeNonAscii": true,
       "commentMode": "none"
     },
-    "sourceMap": true
+    "sourceMap": false
   }
 ]

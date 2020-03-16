@@ -1,4 +1,6 @@
-﻿@model XmlSigner.Data.Models.XmlFile
+﻿@*@model XmlSigner.Data.Models.XmlFile*@
+
+@model XmlSigner.ViewModels.XmlFileAddViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -7,19 +9,31 @@
 <h1>Add an XML File</h1>
 
 <h4>Xml File</h4>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form enctype="multipart/form-data" asp-controller="XmlFiles" asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FileContent" class="control-label"></label>
-                <input class="form-control" type="file" asp-for="FileContent">
-                <span asp-validation-for="FileContent" class="text-danger"></span>
+                <label asp-for="XmlFile" class="control-label"></label>
+                <input class="form-control" asp-for="XmlFile">
+                <span asp-validation-for="XmlFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PreviousFileId" class="control-label"></label>
-                <select asp-for="PreviousFileId" class ="form-control" asp-items="ViewBag.PreviousFileId"></select>
+                @*
+                <select>
+                    <option val="">--Select--</option>
+                    foreach(item in Model.DepartmentUnits)
+                    {
+                    <option val="@PreviousFileId.">@item.title</option>}
+                </select>
+                @Html.DropDownList("PreviousFileId", new SelectList(ViewBag.PreviousFileId), "--Select--")            
+                *@
+            <select asp-for="PreviousFileId" class="form-control" asp-items="ViewBag.PreviousFileId">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
+
             </div>
 
             <div class="form-group">

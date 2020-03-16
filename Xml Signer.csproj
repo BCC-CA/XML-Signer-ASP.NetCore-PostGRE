@@ -4,17 +4,23 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-Xml_Signer-D683435B-16AF-46E6-8B06-0D0D595EABA0</UserSecretsId>
     <RootNamespace>XmlSigner</RootNamespace>
+    <ApplicationIcon>.\wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20200302054525_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200302054525_InitialMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="Readme.md" />
   </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
+    <PackageReference Include="DataTables.AspNetCore.Mvc" Version="1.4.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.1" />

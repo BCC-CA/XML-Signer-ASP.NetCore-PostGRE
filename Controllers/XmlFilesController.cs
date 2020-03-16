@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
+using XmlSigner.ViewModels;
+using XmlSigner.ViewModels.Mappers;
 
 namespace XmlSigner.Controllers
 {
     public class XmlFilesController : Controller
     {
+        private UserManager<IdentityUser<long>> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public XmlFilesController(ApplicationDbContext context)
+        public XmlFilesController(ApplicationDbContext context, UserManager<IdentityUser<long>> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: XmlFiles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.XmlFiles.Include(x => x.PreviousSignedFile).Include(x => x.Signer);
+            var applicationDbContext = _context.XmlFiles
+                                            .Where(ic => ic.DeletionTime == null)
+                                            .Include(x => x.PreviousSignedFile).Include(x => x.Signer);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,10 +39,10 @@ namespace XmlSigner.Controllers
                 return NotFound();
             }
 
-            var xmlFile = await _context.XmlFiles
-                .Include(x => x.PreviousSignedFile)
-                .Include(x => x.Signer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            XmlFile xmlFile = await _context.XmlFiles
+                            .Include(x => x.PreviousSignedFile)
+                            .Include(x => x.Signer)
+                            .FirstOrDefaultAsync(m => m.Id == id);
             if (xmlFile == null)
             {
                 return NotFound();
@@ -49,7 +54,7 @@ namespace XmlSigner.Controllers
         // GET: XmlFiles/Create
         public IActionResult Create()
         {
-            ViewData["PreviousFileId"] = new SelectList(_context.XmlFiles, "Id", "FileContent");
+            ViewData["PreviousFileId"] = new SelectList(_context.XmlFiles.Where(ic => ic.DeletionTime == null), "Id", "FileRealName",null);
             //ViewData["SignerId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
@@ -59,16 +64,23 @@ namespace XmlSigner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FileContent,PreviousFileId")] XmlFile xmlFile)
+        public async Task<IActionResult> Create(XmlFileAddViewModel xmlFileAddViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(xmlFile);
+                //Convert to xmlfiile model with mapper, then save the model to db
+                XmlFile xmlFile = await XmlFileMapper.MapFromXmlFileAddViewModelAsync(xmlFileAddViewModel);
+                if(xmlFile.PreviousFileId!=null)
+                {
+                    xmlFile.PreviousSignedFile = await _context.XmlFiles.FindAsync(xmlFile.PreviousFileId);
+                }
+                xmlFile.Signer = await _userManager.GetUserAsync(User);
+                _context.XmlFiles.Add(xmlFile);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PreviousFileId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", xmlFile.PreviousFileId);
-            return View(xmlFile);
+            ViewData["PreviousFileId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", xmlFileAddViewModel.PreviousFileId);
+            return View(xmlFileAddViewModel);
         }
 
         // GET: XmlFiles/Edit/5
@@ -84,8 +96,8 @@ namespace XmlSigner.Controllers
             {
                 return NotFound();
             }
-            ViewData["PreviousFileId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", xmlFile.PreviousFileId);
-            ViewData["SignerId"] = new SelectList(_context.Users, "Id", "Id", xmlFile.SignerId);
+            ViewData["PreviousFileId"] = new SelectList(_context.XmlFiles, "Id", "FileRealName", xmlFile.PreviousFileId);
+            ViewData["SignerId"] = new SelectList(_context.Users, "Id", "UserName", xmlFile.SignerId);
             return View(xmlFile);
         }
 
@@ -94,7 +106,8 @@ namespace XmlSigner.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FileContent,FileRealName,SignerId,PreviousFileId,Id,CreateTime,LastUpdateTime,DeletionTime")] XmlFile xmlFile)
+        //[Bind("FileContent,FileRealName,SignerId,PreviousFileId,Id,CreateTime,LastUpdateTime,DeletionTime")]
+        public async Task<IActionResult> Edit(long id, [Bind("FileRealName,SignerId,PreviousFileId,Id,CreateTime,LastUpdateTime,DeletionTime")] XmlFile xmlFile)
         {
             if (id != xmlFile.Id)
             {
@@ -152,7 +165,8 @@ namespace XmlSigner.Controllers
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var xmlFile = await _context.XmlFiles.FindAsync(id);
-            _context.XmlFiles.Remove(xmlFile);
+            //_context.XmlFiles.Remove(xmlFile);
+            xmlFile.SoftDelete();
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

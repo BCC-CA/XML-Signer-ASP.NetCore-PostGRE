@@ -156,6 +156,35 @@ namespace XmlSigner.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DownloadUploadTokens",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreateTime = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: true),
+                    LastUpdateTime = table.Column<DateTime>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    Token = table.Column<string>(nullable: true),
+                    ExpirityTime = table.Column<DateTime>(nullable: false),
+                    UploadTime = table.Column<DateTime>(nullable: true),
+                    TableName = table.Column<int>(nullable: false),
+                    IsUsed = table.Column<bool>(nullable: false),
+                    DbEntryId = table.Column<long>(nullable: false),
+                    SignReason = table.Column<string>(nullable: true),
+                    SignerId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DownloadUploadTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DownloadUploadTokens_AspNetUsers_SignerId",
+                        column: x => x.SignerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "XmlFiles",
                 columns: table => new
                 {
@@ -166,6 +195,9 @@ namespace XmlSigner.Data.Migrations
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     FileContent = table.Column<string>(type: "text", nullable: false),
                     FileRealName = table.Column<string>(maxLength: 32767, nullable: false),
+                    TableName = table.Column<int>(nullable: false),
+                    DbEntryId = table.Column<long>(nullable: false),
+                    IsAlreadyUsed = table.Column<bool>(nullable: false),
                     SignerId = table.Column<long>(nullable: true),
                     PreviousFileId = table.Column<long>(nullable: true)
                 },
@@ -182,6 +214,38 @@ namespace XmlSigner.Data.Migrations
                         name: "FK_XmlFiles_AspNetUsers_SignerId",
                         column: x => x.SignerId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeaveApplications",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreateTime = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: true),
+                    LastUpdateTime = table.Column<DateTime>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    ApplicantId = table.Column<long>(nullable: false),
+                    ApplicantName = table.Column<string>(maxLength: 32767, nullable: false),
+                    Designation = table.Column<string>(maxLength: 32767, nullable: false),
+                    LeaveStart = table.Column<DateTime>(nullable: false),
+                    LeaveEnd = table.Column<DateTime>(nullable: false),
+                    LeaveType = table.Column<int>(nullable: false),
+                    PurposeOfLeave = table.Column<string>(maxLength: 32767, nullable: false),
+                    AddressDuringLeave = table.Column<string>(maxLength: 32767, nullable: false),
+                    PhoneNoDuringLeave = table.Column<string>(maxLength: 11, nullable: false),
+                    ApplicationStatus = table.Column<int>(nullable: false),
+                    LastSignedId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveApplications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LeaveApplications_XmlFiles_LastSignedId",
+                        column: x => x.LastSignedId,
+                        principalTable: "XmlFiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -224,6 +288,16 @@ namespace XmlSigner.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_DownloadUploadTokens_SignerId",
+                table: "DownloadUploadTokens",
+                column: "SignerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeaveApplications_LastSignedId",
+                table: "LeaveApplications",
+                column: "LastSignedId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_XmlFiles_PreviousFileId",
                 table: "XmlFiles",
                 column: "PreviousFileId");
@@ -252,10 +326,16 @@ namespace XmlSigner.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "XmlFiles");
+                name: "DownloadUploadTokens");
+
+            migrationBuilder.DropTable(
+                name: "LeaveApplications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "XmlFiles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

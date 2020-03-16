@@ -218,6 +218,139 @@ namespace XmlSigner.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("XmlSigner.Data.Models.DownloadUploadToken", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime?>("CreateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("CreateTime")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("DbEntryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("ExpirityTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastUpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("LastUpdateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("SignReason")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("SignerId")
+                        .HasColumnName("SignerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("TableName")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UploadTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SignerId");
+
+                    b.ToTable("DownloadUploadTokens");
+                });
+
+            modelBuilder.Entity("XmlSigner.Data.Models.LeaveApplication", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("AddressDuringLeave")
+                        .IsRequired()
+                        .HasColumnName("AddressDuringLeave")
+                        .HasColumnType("character varying(32767)")
+                        .HasMaxLength(32767);
+
+                    b.Property<long>("ApplicantId")
+                        .HasColumnName("ApplicantId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ApplicationStatus")
+                        .HasColumnName("ApplicationStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("CreateTime")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Designation")
+                        .IsRequired()
+                        .HasColumnName("Designation")
+                        .HasColumnType("character varying(32767)")
+                        .HasMaxLength(32767);
+
+                    b.Property<long?>("LastSignedId")
+                        .HasColumnName("LastSignedId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("LastUpdateTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("LastUpdateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("LeaveEnd")
+                        .HasColumnName("LeaveEnd")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("LeaveStart")
+                        .HasColumnName("LeaveStart")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("LeaveType")
+                        .HasColumnName("LeaveType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("ApplicantName")
+                        .HasColumnType("character varying(32767)")
+                        .HasMaxLength(32767);
+
+                    b.Property<string>("PhoneNoDuringLeave")
+                        .IsRequired()
+                        .HasColumnName("PhoneNoDuringLeave")
+                        .HasColumnType("character varying(11)")
+                        .HasMaxLength(11);
+
+                    b.Property<string>("PurposeOfLeave")
+                        .IsRequired()
+                        .HasColumnName("PurposeOfLeave")
+                        .HasColumnType("character varying(32767)")
+                        .HasMaxLength(32767);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LastSignedId");
+
+                    b.ToTable("LeaveApplications");
+                });
+
             modelBuilder.Entity("XmlSigner.Data.Models.XmlFile", b =>
                 {
                     b.Property<long>("Id")
@@ -229,6 +362,9 @@ namespace XmlSigner.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("CreateTime")
                         .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("DbEntryId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp without time zone");
@@ -245,6 +381,9 @@ namespace XmlSigner.Data.Migrations
                         .HasColumnType("character varying(32767)")
                         .HasMaxLength(32767);
 
+                    b.Property<bool>("IsAlreadyUsed")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("LastUpdateTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("LastUpdateTime")
@@ -257,6 +396,9 @@ namespace XmlSigner.Data.Migrations
                     b.Property<long?>("SignerId")
                         .HasColumnName("SignerId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("TableName")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -316,6 +458,20 @@ namespace XmlSigner.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("XmlSigner.Data.Models.DownloadUploadToken", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<long>", "Signer")
+                        .WithMany()
+                        .HasForeignKey("SignerId");
+                });
+
+            modelBuilder.Entity("XmlSigner.Data.Models.LeaveApplication", b =>
+                {
+                    b.HasOne("XmlSigner.Data.Models.XmlFile", "PreviousSignedFile")
+                        .WithMany()
+                        .HasForeignKey("LastSignedId");
                 });
 
             modelBuilder.Entity("XmlSigner.Data.Models.XmlFile", b =>
