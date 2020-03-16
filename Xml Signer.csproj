@@ -4,34 +4,16 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-Xml_Signer-D683435B-16AF-46E6-8B06-0D0D595EABA0</UserSecretsId>
     <RootNamespace>XmlSigner</RootNamespace>
+    <ApplicationIcon>.\wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20200225071800_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200225071800_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200225082038_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200225082038_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200226155422_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200226155422_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200226163544_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200226163544_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200226163635_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200226163635_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200226165847_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200226165847_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200227053751_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200227053751_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200227065007_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200227065007_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200301061151_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20200301061151_InitialMigration.Designer.cs" />
     <Compile Remove="Data\Migrations\20200302054525_InitialMigration.cs" />
     <Compile Remove="Data\Migrations\20200302054525_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="Readme.md" />
   </ItemGroup>
 
 

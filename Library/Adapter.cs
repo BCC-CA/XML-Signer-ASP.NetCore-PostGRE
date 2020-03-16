@@ -11,17 +11,20 @@ namespace XmlSigner.Library
 {
     public static class Adapter
     {
+        /*
         internal static string Base64EncodedCurrentTime()
         {
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(DateTime.UtcNow.ToString());
             return Convert.ToBase64String(plainTextBytes);
         }
+        */
 
         internal static DateTime Base64DecodTime(string encodedTimeString)
         {
             byte[] base64EncodedBytes = Convert.FromBase64String(encodedTimeString);
             return DateTime.Parse(Encoding.UTF8.GetString(base64EncodedBytes));
         }
+
         internal static async Task<string> ReadAsStringAsync(IFormFile file)
         {
             StringBuilder result = new StringBuilder();

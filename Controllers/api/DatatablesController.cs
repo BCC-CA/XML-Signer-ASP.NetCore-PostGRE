@@ -2,13 +2,15 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
 
 namespace XmlSigner.Controllers.api
 {
-    [Authorize]
+    //[Authorize]
+    //[ValidateAntiForgeryToken]
     [Route("api/[controller]")]
     [ApiController]
     public class DatatablesController : ControllerBase
@@ -39,26 +41,13 @@ namespace XmlSigner.Controllers.api
         // more details see https://aka.ms/RazorPagesCRUD.
         [Consumes("application/json")]
         [HttpPost("LeaveApplications")]
-        public async Task<ActionResult<string>> PostLeaveApplication()    //IFormCollection data
+        public async Task<ActionResult<string>> PostLeaveApplication(FormCollection collection) //Task<ActionResult<string>>
         {
-            //var leaveApplication = await _context.LeaveApplications.FindAsync(1);
-            //return Ok(data);
-            /*using (var Reader = new StreamReader(Request.Body, Encoding.UTF8))
-            {
-                return await Reader.ReadToEndAsync();
-            }*/
-            /*string body = "";
-            using (StreamReader stream = new StreamReader(Request.Body))
+            string body = "";
+            using (StreamReader stream = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 body = await stream.ReadToEndAsync();
-            }*/
-
-            var reader = await Request.BodyReader.ReadAsync();
-            Request.Body.Position = 0;
-            var buffer = reader.Buffer;
-            var body = Encoding.UTF8.GetString(buffer.FirstSpan);
-            Request.Body.Position = 0;
-
+            }
             return body;
         }
     }

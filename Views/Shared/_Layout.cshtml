@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Xml Signer Title</title>
+    @Html.AntiForgeryToken()
+    @*
+      var token = $('input[name="__RequestVerificationToken"]').val();  
+    *@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.css">
@@ -16,8 +20,7 @@
               asp-fallback-test-class="sr-only"
               asp-fallback-test-property="position"
               asp-append-version="true"
-              asp-fallback-test-value="absolute"
-              />
+              asp-fallback-test-value="absolute" />
     </environment>
 </head>
 <body>

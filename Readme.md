@@ -1,62 +1,29 @@
-# BCC-CA XML SIgner Srever
+# BCC-CA XML Signer Srever
 
-This app is the server of BCC_CA XML Signer app. It will be used as server of signer app.
+This app is an example server of [BCC-CA Desktop Client](https://github.com/AbrarJahin/BCC-CA_XMLSigningClient) built on [ASP.Net Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) with [PostGRE Database](https://www.postgresql.org/). We are using ASP.Net Core and PostGRE becuse both of them are open source and can be hosted in cheap ***linux server*** ([*Ubuntu*](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1), [*CentOS*](https://www.vultr.com/docs/how-to-deploy-a-net-core-web-application-on-centos-7) etc.) with full functionality. If anyone like to use another DB, then here is the whole [list of supported databases](https://docs.microsoft.com/en-us/ef/core/providers/?tabs=dotnet-core-cli#current-providers). For MySQL, along with [official connector library](https://dev.mysql.com/doc/connector-net/en/connector-net-entityframework-core.html), other populer libraries can be used like [Pomelo.EntityFrameworkCore.MySql](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql) for MySQL as well as [MariaDB](https://mariadb.org/).
+This web app will be used as one of the server example for the signer  app. This app will also be used as XML Signature verification service. Most common commands and links regarding to ASP.Net Core is provided in [here](./Links-and-Commands.md).
 
-This app will also be used as user verification service.
+In this web app,  provide [this](https://github.com/AbrarJahin/BCC-CA_XMLSigningClient#installation-and-deployment) mentioned APIs as well as XML verification service along with XML serialization and deserialization.
 
-## Migration Commands-
+## APIs needed for enabling signature for web forms
+In this web app, there are mainly 4 APIs implemented for enabling signature-
 
-	- Add-Migration InitialMigration -OutputDir "Data/Migrations"	(Add migration to a specific folder)
-	- Add-Migration <MigrationName>	(Add a new migration in normal time)
-	- Remove-Migration			(Remove last migration)
-	- Remove-Migration -Force	(Remove last migration forcefully)
-	- Update-Database 0			(Remove all table)
-	- Update-Database			(Create all table)
-	- Script-migration
-	- Update-Database –TargetMigration: <name of last good migration>	(Restore from a good migration)
-	- Drop-Database				(Drop The Database)
+1. [Generate Download-Upload Token](#generate-download-upload-token)
+2. [Download XML File](#download-xml-file-get-api)
+3. [Upload XML File](#upload-xml-file-post-api)
+4. [Verify XML File Signature](#verify-xml-file-signature)
 
-Create New Migration after dropping Current Migration-
+Among this APIs, [Download XML File API](#download-xml-file-get-api) and [Upload XML File API](#upload-xml-file-post-api) is directly used by the [BCC-CA Desktop Signing Client](https://github.com/AbrarJahin/BCC-CA_XMLSigningClient#api-list-needed-in-the-server).
+Along with those APIs, conversion of any form model to XML and XML to that form data is also provided in [here](./Library/Adapter.cs#L39) and [here](./Library/Adapter.cs#L52). Reading signature time from 
 
-	Update-Database 0; Remove-Migration; Add-Migration InitialMigration -OutputDir "Data/Migrations"; Update-Database
+### Generate Download-Upload Token
+This API is implemented in [here](./Controllers/api/XmlFilesController.cs#L114).
 
-Create New DB after dropping DB-
+### Download XML File Get API
+In this architecture of enabling digital signing to any web form, we are storing the web form as XML which is easily signed digitally. With this API, any XML file can be downloaded, but the XML file download URL can live for a small time with strong token validation so that the file security can be assured and no authinticated person or service can download the file and retrieve the data. To do that, we have created a API for generating download-upload token in [here](./Controllers/api/XmlFilesController.cs#L132). It is basically an API where only 
 
-	Update-Database 0; Update-Database
+### Upload XML File POST API
+This API is implemented in [here](./Controllers/api/XmlFilesController.cs#L68).
 
-## Initial Project Builder-
-
-	https://aspnetboilerplate.com/
-
-## API Creation-
-
-https://www.codingame.com/playgrounds/35462/creating-web-api-in-asp-net-core-2-0/part-1---web-api
-
-## Linking with Keys-
-
-https://github.com/armancse100/ASP.NetCore-MySQL-Login-CRUD/blob/master/InventoryManagement/Models/Product.cs
-
-## Seed Data -
-
-https://csharp-video-tutorials.blogspot.com/2019/05/entity-framework-core-seed-data.html
-
-## SignalR for Socket-
-
-https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr?view=aspnetcore-3.1&tabs=visual-studio
-
-Configure SSL with SignalR-
-
-https://weblog.west-wind.com/posts/2013/sep/23/hosting-signalr-under-sslhttps
-
-## WebRTC for Video Chat For Real Time User Verifire-
-
-https://www.html5rocks.com/en/tutorials/webrtc/basics/
-
-https://webrtc.github.io/samples/
-
-Should store and verify data after all data is provided by the user.
-
-## JS, CSS, HTML Minifire Config-
-
-https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-
+### Verify XML File Signature
+This API is implemented in [here](./Controllers/api/XmlFilesController.cs#L35).
