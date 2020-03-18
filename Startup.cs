@@ -66,6 +66,16 @@ namespace XmlSigner
             app.UseAuthentication();
             app.UseAuthorization();
 
+            /*app.UseCsp(csp =>
+            {
+                csp.AllowScripts
+                        .FromSelf()
+                        .From("localhost:5050");
+                csp.AllowStyles
+                        .FromSelf()
+                        .From("localhost:5050");
+            });*/
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
