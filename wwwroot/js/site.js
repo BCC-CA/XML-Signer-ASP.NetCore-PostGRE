@@ -25,7 +25,7 @@ $(document).ready(function () {
 			//contentType: "application/json; charset=utf-8",
 			contentType: 'text/plain',
 			accepts: 'application/json',
-			url: "http://localhost:5050/",
+			url: "http://127.0.0.1:5050/",
 			dataType: 'jsonp',
 			async: false,
 			data: {
@@ -69,7 +69,7 @@ $(document).ready(function () {
 			//contentType: "application/json; charset=utf-8",
 			contentType: 'text/plain',
 			accepts: 'application/json',
-			url: "http://localhost:5050/",
+			url: "http://127.0.0.1:5050/",
 			dataType: 'jsonp',
 			async: false,
 			data: {
