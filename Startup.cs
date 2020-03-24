@@ -22,8 +22,9 @@ namespace XmlSigner
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseNpgsql(
-                        Configuration.GetConnectionString("DevelopConnection")));
+                    options.UseSqlite(
+                        Configuration.GetConnectionString("SqLiteConnection")));
+
             /*if (env.IsDevelopment())
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
@@ -34,7 +35,7 @@ namespace XmlSigner
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseNpgsql(
-                        Configuration.GetConnectionString("DefaultConnection")));
+                        Configuration.GetConnectionString("DeployConnection")));
             }*/
             services.AddDefaultIdentity<IdentityUser<long>>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole<long>>()
