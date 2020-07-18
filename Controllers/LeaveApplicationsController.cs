@@ -150,9 +150,20 @@ namespace XmlSigner.Controllers
             {
                 return NotFound();
             }
-            ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile);
-            await asv.UpdateStatusFromDatabase(_context);
-            return View(asv);
+            try
+            {
+                ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile);
+                await asv.UpdateStatusFromDatabase(_context);
+                if(asv.CertificateList == null)
+                {
+                    return View();
+                }
+                return View(asv);
+            }
+            catch(Exception ex)
+            {
+                return View();
+            }
         }
 
         // GET: LeaveApplications/Edit/5

@@ -4,128 +4,143 @@
     ViewData["Title"] = "Leave Application - Approve";
 }
 
-<h1>Verify</h1>
+@if (Model != null)
+{
+    <h1>Verify</h1>
 
-<div>
-    <h4>UnSigned Application</h4>
-    <hr />
+    <div>
+        <h4>UnSigned Application</h4>
+        <hr />
 
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="LeaveApplication.Name" class="control-label"></label>
-                <input asp-for="LeaveApplication.Name" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LeaveApplication.Designation" class="control-label"></label>
-                <input asp-for="LeaveApplication.Designation" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.Designation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LeaveApplication.LeaveStart" class="control-label"></label>
-                <input type="text" value="@Html.DisplayFor(model => model.LeaveApplication.LeaveStart)" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.LeaveStart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LeaveApplication.LeaveEnd" class="control-label"></label>
-                <input type="text" value="@Html.DisplayFor(model => model.LeaveApplication.LeaveEnd)" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.LeaveEnd" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="LeaveApplication.LeaveType" class="control-label"></label>
-                <input type="text" value="@Html.DisplayFor(model => model.LeaveApplication.LeaveType)" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.LeaveType" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="LeaveApplication.PhoneNoDuringLeave" class="control-label"></label>
-                <input asp-for="LeaveApplication.PhoneNoDuringLeave" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.PhoneNoDuringLeave" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LeaveApplication.ApplicationStatus" class="control-label"></label>
-                <input asp-for="LeaveApplication.ApplicationStatus" class="form-control" readonly />
-                <span asp-validation-for="LeaveApplication.ApplicationStatus" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="LeaveApplication.PurposeOfLeave" class="control-label"></label>
-                <textarea asp-for="LeaveApplication.PurposeOfLeave" class="form-control" rows="5" readonly></textarea>
-                <span asp-validation-for="LeaveApplication.PurposeOfLeave" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LeaveApplication.AddressDuringLeave" class="control-label"></label>
-                <textarea asp-for="LeaveApplication.AddressDuringLeave" class="form-control" rows="5" readonly></textarea>
-                <span asp-validation-for="LeaveApplication.AddressDuringLeave" class="text-danger"></span>
-            </div>
-        </div>
-    </div>
-
-    <hr />
-
-    @if (Model.LeaveApplication.ApplicationStatus == XmlSigner.Data.Models.ApplicationStatus.Approved)
-    {
-        <h4 class="text-success">
-            This application is already approved
-        </h4>
-    }
-    else
-    {
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.Name" class="control-label"></label>
+                    <input asp-for="LeaveApplication.Name" class="form-control" readonly />
+                    <span asp-validation-for="LeaveApplication.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.Designation" class="control-label"></label>
+                    <input asp-for="LeaveApplication.Designation" class="form-control" readonly />
+                    <span asp-validation-for="LeaveApplication.Designation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.LeaveStart" class="control-label"></label>
+                    <input type="text" value="@Html.DisplayFor(model => model.LeaveApplication.LeaveStart)" class="form-control" readonly />
+                    <span asp-validation-for="LeaveApplication.LeaveStart" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.LeaveEnd" class="control-label"></label>
+                    <input type="text" value="@Html.DisplayFor(model => model.LeaveApplication.LeaveEnd)" class="form-control" readonly />
+                    <span asp-validation-for="LeaveApplication.LeaveEnd" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.LeaveType" class="control-label"></label>
+                    <input type="text" value="@Html.DisplayFor(model => model.LeaveApplication.LeaveType)" class="form-control" readonly />
+                    <span asp-validation-for="LeaveApplication.LeaveType" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.PhoneNoDuringLeave" class="control-label"></label>
+                    <input asp-for="LeaveApplication.PhoneNoDuringLeave" class="form-control" readonly />
+                    <span asp-validation-for="LeaveApplication.PhoneNoDuringLeave" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="LeaveApplication.ApplicationStatus" class="control-label"></label>
-                    <select asp-for="LeaveApplication.ApplicationStatus" asp-items="Html.GetEnumSelectList<XmlSigner.Data.Models.ApplicationStatus>()" class="form-control" id="application-status">
-                        <option disabled selected>-- Please Select a Status --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <a href="#"
-                       class="btn btn-outline-danger approve_application"
-                       file_id="@Model.XmlFile.Id"
-                       role="button">
-                        Sign And Approve
-                    </a>
+                    <input asp-for="LeaveApplication.ApplicationStatus" class="form-control" readonly />
+                    <span asp-validation-for="LeaveApplication.ApplicationStatus" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label class="control-label">Comment</label>
-                    <textarea class="form-control" rows="4" id="reason"></textarea>
+                    <label asp-for="LeaveApplication.PurposeOfLeave" class="control-label"></label>
+                    <textarea asp-for="LeaveApplication.PurposeOfLeave" class="form-control" rows="5" readonly></textarea>
+                    <span asp-validation-for="LeaveApplication.PurposeOfLeave" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LeaveApplication.AddressDuringLeave" class="control-label"></label>
+                    <textarea asp-for="LeaveApplication.AddressDuringLeave" class="form-control" rows="5" readonly></textarea>
+                    <span asp-validation-for="LeaveApplication.AddressDuringLeave" class="text-danger"></span>
                 </div>
             </div>
         </div>
-    }
 
-    @if (Model.CertificateList?.Any() == true)
-    {
-        <div class="container">
-            @foreach (var item in Model.CertificateList)
-            {
-                <hr />
-                <div class="row bg-info">
-                    <div class="col-md-4">
-                        <label class="control-label">Issuer</label>
-                        <p>@item.Issuer</p>
+        <hr />
+
+        @if (Model.LeaveApplication.ApplicationStatus == XmlSigner.Data.Models.ApplicationStatus.Approved)
+        {
+            <h4 class="text-success">
+                This application is already approved
+            </h4>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LeaveApplication.ApplicationStatus" class="control-label"></label>
+                        <select asp-for="LeaveApplication.ApplicationStatus" asp-items="Html.GetEnumSelectList<XmlSigner.Data.Models.ApplicationStatus>()" class="form-control" id="application-status">
+                            <option disabled selected>-- Please Select a Status --</option>
+                        </select>
                     </div>
-                    <div class="col-md-4">
-                        <label class="control-label">Subject</label>
-                        <p>@item.Subject</p>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="control-label">SigningTime</label>
-                        <p>@item.SigningTime</p>
+                    <div class="form-group">
+                        <a href="#"
+                           class="btn btn-outline-danger approve_application"
+                           file_id="@Model.XmlFile.Id"
+                           role="button">
+                            Sign And Approve
+                        </a>
                     </div>
                 </div>
-            }
-        </div>
-    }
-</div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Comment</label>
+                        <textarea class="form-control" rows="4" id="reason"></textarea>
+                    </div>
+                </div>
+            </div>
+        }
 
-<div>
-    <a asp-action="Index">List</a>
-</div>
+        @if (Model.CertificateList?.Any() == true)
+        {
+            <div class="container">
+                @foreach (var item in Model.CertificateList)
+                {
+                    <hr />
+                    <div class="row bg-info">
+                        <div class="col-md-4">
+                            <label class="control-label">Issuer</label>
+                            <p>@item.Issuer</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">Subject</label>
+                            <p>@item.Subject</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">SigningTime</label>
+                            <p>@item.SigningTime</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <div class="alert alert-danger">
+                    <strong>The Form Data was Modified!</strong><br/>
+                    Please Contact With System Admin
+                </div>
+            </p>
+        </div>
+    </div>
+}
+        <div>
+            <a asp-action="Index">List</a>
+        </div>
