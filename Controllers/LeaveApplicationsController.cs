@@ -131,7 +131,7 @@ namespace XmlSigner.Controllers
         {
             return View(
                     await _context.LeaveApplications
-                            .Where(d => d.ApplicationStatus == ApplicationStatus.Approved)
+                            .Where(d => d.ApplicationStatus == ApplicationStatus.Approved || d.ApplicationStatus == ApplicationStatus.Rejected)
                             .OrderBy(d => d.Id)
                             .ToListAsync()
                 );
