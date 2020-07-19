@@ -10,7 +10,7 @@ using XmlSigner.Data;
 namespace XmlSigner.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200302113556_InitialMigration")]
+    [Migration("20200719052601_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

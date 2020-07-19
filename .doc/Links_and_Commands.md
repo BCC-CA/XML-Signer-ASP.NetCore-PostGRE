@@ -6,7 +6,7 @@
 	- Add-Migration <MigrationName>	#Add a new migration in normal time
 	- Remove-Migration			#Remove last migration
 	- Remove-Migration -Force	#Remove last migration forcefully
-	- Update-Database 0		#Remove all table
+	- Update-Database 0		    #Remove all table
 	- Update-Database			#Create all table
 	- Script-migration
 	- Update-Database –TargetMigration: <name of last good migration>	#Restore from a good migration

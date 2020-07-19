@@ -10,6 +10,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20200302054525_InitialMigration.cs" />
     <Compile Remove="Data\Migrations\20200302054525_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200302113556_InitialMigration.cs" />
+    <Compile Remove="Data\Migrations\20200302113556_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

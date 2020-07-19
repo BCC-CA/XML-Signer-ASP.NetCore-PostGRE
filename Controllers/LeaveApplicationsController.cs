@@ -120,7 +120,7 @@ namespace XmlSigner.Controllers
         {
             return View(
                     await _context.LeaveApplications
-                            .Where(d => d.ApplicationStatus == ApplicationStatus.Applied)
+                            .Where(d => d.ApplicationStatus == ApplicationStatus.Processing)
                             .OrderBy(d=> d.Id)
                             .ToListAsync()
                 );

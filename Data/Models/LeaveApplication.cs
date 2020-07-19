@@ -21,11 +21,11 @@ namespace XmlSigner.Data.Models
     public enum ApplicationStatus
     {
         [Display(Name = "Application is Processing")]
-        Applied = 0,
+        Processing = 0,
         /*[Display(Name = "Application Forwarded")]
-        Forwarded,
-        [Display(Name = "Application Forwarde Approved")]
-        Forward_Confirmed,*/
+        Forwarded,*/
+        [Display(Name = "Application Rejected")]
+        Rejected,
         [Display(Name = "Application Approved")]
         Approved
     }
@@ -59,7 +59,7 @@ namespace XmlSigner.Data.Models
         [Phone]
         public string PhoneNoDuringLeave { get; set; }
         [Column("ApplicationStatus"), Display(Name = "Application Status", Prompt = "Please Choose Application Status")]
-        public ApplicationStatus ApplicationStatus { get; set; } = ApplicationStatus.Applied;
+        public ApplicationStatus ApplicationStatus { get; set; } = ApplicationStatus.Processing;
 
         [Column("LastSignedId"), Display(Name = "Last Signed/Unsigned File", Prompt = "Please select Previous File")]
         public long? LastSignedId { get; set; }
