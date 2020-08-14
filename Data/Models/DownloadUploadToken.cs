@@ -30,6 +30,6 @@ namespace XmlSigner.Data.Models
         [IgnoreDataMember, Column("SignerId")]
         public long? SignerId { get; set; }
         [ForeignKey("SignerId")]
-        public virtual IdentityUser<long> Signer { get; set; }
+        public virtual User Signer { get; set; }
     }
 }

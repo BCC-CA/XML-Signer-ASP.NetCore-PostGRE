@@ -6,17 +6,20 @@ using XmlSigner.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using XmlSigner.Data.Models;
 
 namespace XmlSigner
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        private readonly IWebHostEnvironment _env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,9 +39,28 @@ namespace XmlSigner
                     options.UseNpgsql(
                         Configuration.GetConnectionString("DefaultConnection")));
             }*/
-            services.AddDefaultIdentity<IdentityUser<long>>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<User>(options => {
+                    if (_env.IsDevelopment())
+                    {
+                        options.SignIn.RequireConfirmedAccount = true;
+                        // Password settings
+                        options.Password.RequireDigit = false;
+                        options.Password.RequiredLength = 4;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.Password.RequireUppercase = false;
+                        options.Password.RequireLowercase = false;
+                    }
+                    else
+                    {
+                        options.Password.RequiredLength = 8;
+                    }
+                })
                 .AddRoles<IdentityRole<long>>()
                 .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                //.AddRoleManager<RoleManager<IdentityRole<string>>>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddUserManager<UserManager<User>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();

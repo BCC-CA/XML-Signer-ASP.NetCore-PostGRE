@@ -13,10 +13,10 @@ namespace XmlSigner.Controllers
 {
     public class XmlFilesController : Controller
     {
-        private UserManager<IdentityUser<long>> _userManager;
+        private UserManager<User> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public XmlFilesController(ApplicationDbContext context, UserManager<IdentityUser<long>> userManager)
+        public XmlFilesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;

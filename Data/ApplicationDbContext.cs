@@ -5,7 +5,7 @@ using XmlSigner.Data.Models;
 
 namespace XmlSigner.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser<long>, IdentityRole<long>, long>
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<long>, long>
     {
         //Table List - Auth tables are added by default
         public DbSet<XmlFile> XmlFiles { get; set; }

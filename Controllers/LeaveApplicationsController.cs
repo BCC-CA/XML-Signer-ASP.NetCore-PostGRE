@@ -16,9 +16,9 @@ namespace XmlSigner.Controllers
     public class LeaveApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private UserManager<IdentityUser<long>> _userManager;
+        private UserManager<User> _userManager;
 
-        public LeaveApplicationsController(ApplicationDbContext context, UserManager<IdentityUser<long>> userManager)
+        public LeaveApplicationsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -63,7 +63,7 @@ namespace XmlSigner.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser<long> currentUser = await _userManager.GetUserAsync(User);
+                User currentUser = await _userManager.GetUserAsync(User);
                 if(currentUser != null)
                 {
                     leaveApplication.ApplicantId = currentUser.Id;
@@ -160,7 +160,7 @@ namespace XmlSigner.Controllers
                 }
                 return View(asv);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return View();
             }

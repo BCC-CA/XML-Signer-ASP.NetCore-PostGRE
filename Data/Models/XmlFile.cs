@@ -39,7 +39,7 @@ namespace XmlSigner.Data.Models
         [Column("SignerId"), Display(Name = "Signer Id", Prompt = "Please Give Signer Id")]
         public long? SignerId { get; set; }
         [ForeignKey("SignerId"), Display(Name = "Previous Signed/Unsigned File", Prompt = "Please Select Previous File")]
-        public virtual IdentityUser<long> Signer { get; set; }
+        public virtual User Signer { get; set; }
         /*
         [Column("IsFilePreviouslySigned"), Required(ErrorMessage = "File Previous Sign Status should be given"), Display(Name = "File Previous Sign Status", Prompt = "Please Give File Previous Sign Status")]
         public bool IsSigned { get; set; } = true; //False for first file sign
