@@ -100,9 +100,19 @@ namespace XmlSigner
 
             app.UseEndpoints(endpoints =>
             {
+                //AreaRegistration.RegisterAllAreas();
+                //endpoints.IgnoreRoute("{resource}.axd/{*pathInfo}");
+                //endpoints.MapAreaControllerRoute()
+                //endpoints.MapFallback()
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                        name: "auth",
+                        pattern: "auth/{controller=Account}/{action=Regiter}/{id?}"
+                    );
+
+                endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}"
+                    );
                 endpoints.MapRazorPages();
             });
         }
