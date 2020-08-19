@@ -73,7 +73,7 @@ namespace XmlSigner.Controllers.api
             {
                 return BadRequest("Token Not Found");
             }
-            XmlFile xmlFile = await _context.XmlFiles.FindAsync(id);
+            XmlFile xmlFile = await _context.XmlFiles.FindAsync(dut.DbEntryId);
             if (xmlFile == null)
             {
                 return NoContent();

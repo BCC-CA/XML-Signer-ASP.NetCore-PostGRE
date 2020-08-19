@@ -51,7 +51,6 @@ $(document).ready(function () {
 	});
 
 	$(".approve_application").click(function () {
-
 		var id = $(this).attr('file_id');
 		var application_status = $("#application-status").val();
 		var reasaon = $("#reason").val();
