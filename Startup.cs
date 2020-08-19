@@ -106,7 +106,7 @@ namespace XmlSigner
                 //endpoints.MapFallback()
                 endpoints.MapControllerRoute(
                         name: "auth",
-                        pattern: "auth/{controller=Account}/{action=Regiter}/{id?}"
+                        pattern: "auth/{controller=Account}/{action=Register}/{id?}"
                     );
 
                 endpoints.MapControllerRoute(
