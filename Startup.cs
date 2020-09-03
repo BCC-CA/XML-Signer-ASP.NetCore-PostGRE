@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using XmlSigner.Data.Models;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace XmlSigner
 {
@@ -24,21 +26,23 @@ namespace XmlSigner
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseNpgsql(
-                        Configuration.GetConnectionString("DevelopConnection")));
-            /*if (env.IsDevelopment())
+            services.Configure<ForwardedHeadersOptions>(options =>
             {
-                services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseNpgsql(
-                        Configuration.GetConnectionString("DevelopConnection")));
-            }
-            else
-            {
-                services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseNpgsql(
-                        Configuration.GetConnectionString("DefaultConnection")));
-            }*/
+                options.KnownProxies.Add(
+                        IPAddress.Parse(Configuration.GetSection("ApplicationIP").Value)
+                    );
+            });
+
+            services.AddDbContext<ApplicationDbContext>(options => {
+                if (_env.IsDevelopment())
+                {
+                    options.UseNpgsql(Configuration.GetConnectionString("DevelopConnection"));
+                }
+                else
+                {
+                    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                }
+            });
             services.AddDefaultIdentity<User>(options => {
                     if (_env.IsDevelopment())
                     {
@@ -69,6 +73,10 @@ namespace XmlSigner
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {   //Network Level Filtering
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -82,13 +90,12 @@ namespace XmlSigner
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
-            /*app.UseCsp(csp =>
+            /*
+            app.UseCsp(csp =>
             {
                 csp.AllowScripts
                         .FromSelf()
@@ -96,7 +103,8 @@ namespace XmlSigner
                 csp.AllowStyles
                         .FromSelf()
                         .From("localhost:5050");
-            });*/
+            });
+            */
 
             app.UseEndpoints(endpoints =>
             {
