@@ -11,7 +11,7 @@ namespace XmlSigner.Library.Model
             ValidTo = certificate.NotAfter;
             Issuer = certificate.Issuer;
             Subject = certificate.Subject;
-            SigningTime = Adapter.Base64DecodTime(timeString);
+            SigningTime = (DateTime)Adapter.Base64DecodTime(timeString);
         }
 
         public DateTime ValidFrom { get; }
