@@ -94,7 +94,8 @@ namespace XmlSigner.Library
             //var timeString = Adapter.Base64DecodTime(document.GetElementsByTagName("Reference")[0].InnerText);
             string timeString = document.GetElementsByTagName("Reference")[0].Attributes["Id"].Value;
             /*...Decode text in cert here (may need to use Encoding, Base64, UrlEncode, etc) ending with 'data' being a byte array...*/
-            X509Certificate2 certificate = new X509Certificate2(Encoding.ASCII.GetBytes(certString));
+            byte[] byteStream = Encoding.ASCII.GetBytes(certString);
+            X509Certificate2 certificate = new X509Certificate2(byteStream);
             return new Certificate(certificate, timeString);
         }
 
