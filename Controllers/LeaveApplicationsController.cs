@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
@@ -17,11 +18,13 @@ namespace XmlSigner.Controllers
     {
         private readonly ApplicationDbContext _context;
         private UserManager<User> _userManager;
+        private readonly IConfiguration _config;
 
-        public LeaveApplicationsController(ApplicationDbContext context, UserManager<User> userManager)
+        public LeaveApplicationsController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
+            _config = configuration;
         }
 
         // GET: LeaveApplications
@@ -38,7 +41,7 @@ namespace XmlSigner.Controllers
                 return NotFound();
             }
 
-            var leaveApplication = await _context.LeaveApplications
+            LeaveApplication leaveApplication = await _context.LeaveApplications
                                     .FirstOrDefaultAsync(m => m.Id == id);
             if (leaveApplication == null)
             {
@@ -98,6 +101,7 @@ namespace XmlSigner.Controllers
         }
 
         // GET: LeaveApplications/Sign/5
+        [Obsolete]
         public async Task<IActionResult> Sign(long? id)
         {
             if (id == null)
@@ -110,7 +114,8 @@ namespace XmlSigner.Controllers
             {
                 return NotFound();
             }
-            ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile);
+            ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile, _config);
+            await asv.VerifyXmlWithServiceAsync();
             await asv.UpdateStatusFromDatabase(_context);
             return View(asv);
         }
@@ -137,7 +142,8 @@ namespace XmlSigner.Controllers
                 );
         }
 
-        // GET: LeaveApplications/Sign/5
+        // GET: LeaveApplications/Approve/5
+        [Obsolete]
         public async Task<IActionResult> Approve(long? id)
         {
             if (id == null)
@@ -152,7 +158,8 @@ namespace XmlSigner.Controllers
             }
             try
             {
-                ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile);
+                ApplicationSignViewModel asv = new ApplicationSignViewModel(xmlFile, _config);
+                await asv.VerifyXmlWithServiceAsync();
                 await asv.UpdateStatusFromDatabase(_context);
                 if(asv.CertificateList == null)
                 {

@@ -11,10 +11,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
 using XmlSigner.Library.Model;
+using XmlSigner.Services;
+using XmlSigner.Services.Models;
 
 namespace XmlSigner.Controllers.api
 {
@@ -25,11 +28,13 @@ namespace XmlSigner.Controllers.api
     {
         private UserManager<User> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _config;
 
-        public XmlFilesController(ApplicationDbContext context, UserManager<User> userManager)
+        public XmlFilesController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
+            _config = configuration;
         }
 
         // GET: api/XmlFiles/token/9
@@ -238,21 +243,23 @@ namespace XmlSigner.Controllers.api
 
         // POST: api/XmlFiles/verify
         [HttpPost("verify")]
+        [Obsolete]
         //public async Task<ActionResult<List<X509Certificate2>>> VerifyXmlFile([FromForm]IFormFile xmlFile)
-        public async Task<ActionResult<List<Certificate>>> VerifyXmlFile([FromForm]IFormFile xmlFile)
+        public async Task<ActionResult<List<CertificateModel>>> VerifyXmlFileAndGetCertificates([FromForm]IFormFile xmlFile)
         {
-            List<X509Certificate2> signerCertificateList = new List<X509Certificate2>();
-
             if (xmlFile.Length > 0)
             {
                 XmlDocument xmlDocument = new XmlDocument();
                 try
                 {
-                    xmlDocument.LoadXml(await Adapter.ReadAsStringAsync(xmlFile));
-                    if (XmlSign.CheckIfDocumentPreviouslySigned(xmlDocument))
+                    string xmlString = await Adapter.ReadAsStringAsync(xmlFile);
+                    xmlDocument.LoadXml(xmlString);
+                    bool isSignatureVerified = false;
+                    XmlVerifierService verService = new XmlVerifierService(_config);
+                    List<CertificateModel> certList = await verService.GetAllSignedCertificateAsync(xmlString);
+                    if (isSignatureVerified)
                     {
-                        return XmlSign.GetAllSign(xmlDocument);
-                        //return XmlSign.VerifyAllSign(xmlDocument);
+                        return certList;
                     }
                     else
                     {
