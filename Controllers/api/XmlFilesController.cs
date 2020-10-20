@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -15,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using XmlSigner.Data;
 using XmlSigner.Data.Models;
 using XmlSigner.Library;
-using XmlSigner.Library.Model;
 using XmlSigner.Services;
 using XmlSigner.Services.Models;
 
