@@ -51,7 +51,7 @@ namespace XmlSigner.Services
                         certModel.CertificateHash = (string)signature["certificateHash"];
                         certModel.CertificateIssuer = (string)signature["certificateIssuer"];
                         certModel.CertificateSubject = (string)signature["certificateSubject"];
-                        certModel.SigningTime = (DateTime)signature["signingTime"];
+                        certModel.SigningTime = (DateTime)signature["signingTsaTime"];
                         certModel.tsaSignedTimestamp_Base64_UTF8 = (string)signature["tsaSignedTimestamp_Base64_UTF8"];
                         certList.Add(certModel);
                     }

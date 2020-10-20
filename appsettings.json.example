@@ -1,0 +1,22 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=192.168.51.135;Port=5432;Database=test;User Id=postgres;Password=123;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "ApplicationIP": "192.168.1.6",
+  "AllowedHosts": "*",
+  "XmlVerifierServiceUrl": "http://192.168.51.135:5050/verify_string",
+  "SMTP": {
+    "api": "https://ethereal.email/create",
+    "host": "smtp.ethereal.email",
+    "port": 587,
+    "user": "karli.kassulke3@ethereal.email",
+    "pass": "g9AF9QMXNekMAvBPJ9"
+  }
+}

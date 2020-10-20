@@ -7,6 +7,9 @@
 *.min.js
 *.map
 
+# Ignore config file change
+./appsettings.json
+
 _build/
 _site/
 Properties/
